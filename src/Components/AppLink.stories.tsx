@@ -26,10 +26,10 @@ const meta: Meta<typeof AppLink> = {
   component: AppLink,
   decorators: [
     (Story) => (
-      <MemoryRouter initialEntries={['/staging/starter/roles']}>
+      <MemoryRouter initialEntries={['/settings/roles']}>
         <Routes>
           <Route
-            path="/staging/starter/*"
+            path="/settings/*"
             element={
               <>
                 <Story />
@@ -65,14 +65,14 @@ export const Default: Story = {
       const link = canvas.getByRole('link', { name: 'Create role' });
       await user.click(link);
       const location = canvas.getByTestId('current-location');
-      expect(location.textContent).toBe('/staging/starter/roles/create');
+      expect(location.textContent).toBe('/settings/roles/create');
     });
   },
 };
 
 export const IdempotentBasename: Story = {
   args: {
-    to: '/staging/starter/roles',
+    to: '/settings/roles',
     children: 'Already prefixed link',
   },
   play: async ({ canvasElement, step }) => {
@@ -87,7 +87,7 @@ export const IdempotentBasename: Story = {
         });
         await user.click(link);
         const location = canvas.getByTestId('current-location');
-        expect(location.textContent).toBe('/staging/starter/roles');
+        expect(location.textContent).toBe('/settings/roles');
       },
     );
   },

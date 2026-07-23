@@ -1,6 +1,6 @@
-# frontend-starter-app 
+# platform-settings-ui
 
-React.js starter app for Red Hat Hybrid cloud console UI modules that includes Patternfly and shared Red Hat cloud service frontend components.
+Consolidated frontend application for Red Hat Hybrid Cloud Console platform settings, combining notifications, sources, and user preferences into a single modern codebase.
 
 ## Initial etc/hosts setup
 
@@ -39,25 +39,19 @@ HCC uses OpenShift frontend operator to collect metadata about individual UI mod
 
 To learn about the operator and its configuration follow [this link](./docs/frontend-operator/index.md)
 
-### Scalprum Remote Hooks and Shared Stores
-
-This project demonstrates cross-micro-frontend state management using Scalprum's remote hooks and shared stores pattern. This enables event-driven state synchronization across independently deployed applications with optimal rendering performance.
-
-See the complete implementation in `/src/Routes/SharedStoresDemo/` and read the documentation:
-- [Full Guide](./docs/scalprum-remote-hooks-shared-stores.md) - Comprehensive documentation
-- [Quick Reference](./docs/scalprum-quick-reference.md) - Code snippets and cheat sheet
-
 ### Testing
 
 `npm run verify` will run `npm run lint` (eslint) and `npm test` (Jest)
 
-#### Cypress Component Testing
+### Storybook
 
-This project includes component tests using Cypress for testing React components in isolation:
+This project uses Storybook for component testing and documentation:
 
-- `npm run test:cypress` - Run all component tests headlessly
-- `npm run test:cypress:open` - Open Cypress UI for interactive component testing
-- `npm run test:cypress:component` - Run component tests (same as test:cypress)
+- `npm run storybook` - Start Storybook dev server
+- `npm run build-storybook` - Build Storybook for deployment
+- `npm run test-storybook` - Run Storybook tests
 
-Component tests are fast, reliable, and don't require a running server. They're perfect for testing individual UI components with different props and states.
+### Playwright E2E
 
+- `npx playwright test` - Run E2E tests
+- `npx playwright test --ui` - Interactive mode

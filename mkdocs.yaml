@@ -1,5 +1,5 @@
 docs_dir: ./docs
-site_name: Frontend starter app
+site_name: Platform Settings UI
 
 nav:
   - Home: index.md

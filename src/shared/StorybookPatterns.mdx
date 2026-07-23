@@ -78,7 +78,7 @@ export function createSampleHandlers(
 ) {
   const { networkDelay = 200, onList, onCreate, onDelete } = options;
   return [
-    http.get('/api/starter/v1/items', async ({ request }) => {
+    http.get('/api/platform-settings/v1/items', async ({ request }) => {
       await delay(networkDelay);
       // ... filter, sort, paginate from collection
       onList?.(url.searchParams);

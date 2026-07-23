@@ -4,16 +4,6 @@ import { Route as RouterRoute, Routes as RouterRoutes } from 'react-router-dom';
 import { InvalidObject } from '@redhat-cloud-services/frontend-components/InvalidObject';
 import { Bullseye, Spinner } from '@patternfly/react-core';
 
-const SamplePage = lazy(
-  () =>
-    import(/* webpackChunkName: "SamplePage" */ './features/sample/SamplePage'),
-);
-const SharedStoresDemo = lazy(
-  () =>
-    import(
-      /* webpackChunkName: "SharedStoresDemo" */ './Routes/SharedStoresDemo/SharedStoresDemo'
-    ),
-);
 const OopsPage = lazy(
   () => import(/* webpackChunkName: "OopsPage" */ './Components/OopsPage'),
 );
@@ -23,21 +13,11 @@ const NoPermissionsPage = lazy(
       /* webpackChunkName: "NoPermissionsPage" */ './Components/NoPermissionsPage'
     ),
 );
-const RolesPage = lazy(
-  () =>
-    import(/* webpackChunkName: "RolesPage" */ './features/roles/RolesPage'),
-);
-const CreateRoleWizard = lazy(
-  () =>
-    import(
-      /* webpackChunkName: "CreateRoleWizard" */ './features/roles/components/CreateRoleWizard'
-    ),
-);
-const EditRoleWizard = lazy(
-  () =>
-    import(
-      /* webpackChunkName: "EditRoleWizard" */ './features/roles/components/EditRoleWizard'
-    ),
+
+const LandingPage = () => (
+  <Bullseye>
+    <p>Platform Settings</p>
+  </Bullseye>
 );
 
 const routes = [
@@ -50,22 +30,9 @@ const routes = [
     element: OopsPage,
   },
   {
-    path: 'shared-stores-demo',
-    element: SharedStoresDemo,
-  },
-  {
     path: '/',
-    element: SamplePage,
+    element: LandingPage,
   },
-  {
-    path: 'roles',
-    element: RolesPage,
-    childRoutes: [
-      { path: 'create', element: CreateRoleWizard },
-      { path: ':uuid/edit', element: EditRoleWizard },
-    ],
-  },
-  /* Catch all unmatched routes */
   {
     path: '*',
     element: InvalidObject,

@@ -17,7 +17,7 @@ Determine the repository name from the git remote:
 git remote get-url origin
 ```
 
-Extract the `<org>/<repo-name>` from the URL (e.g., `RedHatInsights/frontend-starter-app`).
+Extract the `<org>/<repo-name>` from the URL (e.g., `RedHatInsights/platform-settings-ui`).
 
 ## Step 2: Check Jira for relevant issues
 
@@ -67,7 +67,7 @@ Update dependencies in logical groups. For each group:
 1. **PatternFly packages** — `@patternfly/react-core`, `@patternfly/react-table`, `@patternfly/react-data-view`, `@patternfly/react-component-groups` (update together)
 2. **Red Hat Cloud Services packages** — `@redhat-cloud-services/*` (update together)
 3. **React ecosystem** — `react`, `react-dom`, `react-router-dom`, `@types/react`, `@types/react-dom` (update together)
-4. **Testing tools** — `jest`, `@testing-library/*`, `cypress`, `@playwright/test` (update together)
+4. **Testing tools** — `jest`, `@testing-library/*`, `@storybook/*`, `@playwright/test` (update together)
 5. **Build tools** — `typescript`, `eslint`, `webpack-bundle-analyzer` (update together)
 6. **Remaining packages** — update individually
 

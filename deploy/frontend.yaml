@@ -3,69 +3,60 @@
 apiVersion: v1
 kind: Template
 metadata:
-  name: frontend-starter-app
+  name: platform-settings-ui
 objects:
   - apiVersion: cloud.redhat.com/v1alpha1
     kind: Frontend
     metadata:
-      name: frontend-starter-app
+      name: platform-settings-ui
     spec:
       feoConfigEnabled: true
       serviceTiles:
-        - id: starter-link
-          section: automation
-          group: ansible
-          title: Starter app FEO integration testing tile
-          href: /staging/starter
-          description: This tile will not show in production and exists only for integration testing purposes
-          icon: AnsibleIcon
+        - id: platform-settings-link
+          section: settings
+          group: settings
+          title: Platform Settings
+          href: /settings
+          description: Manage notifications, sources, and user preferences
+          icon: CogIcon
       searchEntries:
-        - id: "starter"
-          title: "Starter app FEO testing link"
-          href: /staging/foo/starter
-          description: "An experimental link to test FEO features integration"
+        - id: "platform-settings"
+          title: "Platform Settings"
+          href: /settings
+          description: "Manage notifications, sources, and user preferences"
           alt_title:
-            - Starter
-            - Starter app
-            - Hidden App Link
+            - Platform Settings
+            - Settings
+            - Notifications
+            - Sources
+            - User Preferences
       bundleSegments:
-        - segmentId: starter-app-two
-          bundleId: staging
-          position: 200
-          navItems:
-            - id: frontend-starter-app-two
-              title: Roles CRUD Reference
-              href: /staging/starter/roles
-        - segmentId: starter-app
-          bundleId: staging
+        - segmentId: platform-settings
+          bundleId: settings
           position: 100
           navItems:
-            - id: frontend-starter-app
-              title: Starter app link
-              href: /staging/starter
+            - id: platform-settings-ui
+              title: Platform Settings
+              href: /settings
       API:
         versions:
           - v1
       envName: ${ENV_NAME}
-      title: Starter App
-      deploymentRepo: https://github.com/RedHatInsights/frontend-starter-app
+      title: Platform Settings
+      deploymentRepo: https://github.com/RedHatInsights/platform-settings-ui
       frontend:
         paths:
-          - /apps/frontend-starter-app
+          - /apps/platform-settings-ui
       image: ${IMAGE}:${IMAGE_TAG}
       pushCacheEnabled: true
 
       module:
-        manifestLocation: '/apps/frontend-starter-app/fed-mods.json'
+        manifestLocation: '/apps/platform-settings-ui/fed-mods.json'
         modules:
           - id: 'overview'
             module: './RootApp'
             routes:
-              - pathname: /staging/starter
-          - id: 'feo-hidden-route'
-            module: './RootApp'
-            routes:
-              - pathname: /staging/foo/starter
+              - pathname: /settings
 
 parameters:
   - name: ENV_NAME
@@ -73,4 +64,4 @@ parameters:
   - name: IMAGE_TAG
     required: true
   - name: IMAGE
-    value: quay.io/redhat-services-prod/rh-platform-experien-tenant/frontend-starter-app
+    value: quay.io/redhat-services-prod/rh-platform-experien-tenant/platform-settings-ui

@@ -1,6 +1,6 @@
 # Basic configuration
 
-This configuration ensures the frontend module is properly deployed to the cluster. Only attributes that can be changed from the starter app template are described.
+This configuration ensures the frontend module is properly deployed to the cluster. Only attributes that can be customized are described.
 
 ## Basic API
 

@@ -27,15 +27,11 @@ Scalprum Remote Hooks and Shared Stores enable event-driven state management acr
 - **Type safety**: Full TypeScript support with runtime payload validation
 - **No prop drilling**: Access state from any component without passing props
 
-**Reference Implementation**: `/src/Routes/SharedStoresDemo/` demonstrates a complete working example.
-
 ## Core Concepts
 
 ### 1. Shared Store
 
 A **shared store** is a singleton state container created with `createSharedStore()` from `@scalprum/core`. It manages state and dispatches events when state changes.
-
-**Location**: `/src/hooks/sharedStores/useFedModulesStore.ts`
 
 ```typescript
 import { createSharedStore } from '@scalprum/core';
@@ -62,13 +58,13 @@ const store = createSharedStore({
 
 A **remote hook** is a React hook exposed via Module Federation that can be consumed by other micro-frontends using `useRemoteHook()` from `@scalprum/react-core`.
 
-**Consumer Example**: `/src/Routes/SharedStoresDemo/SharedStoresDemo.tsx`
+**Consumer Example**:
 
 ```typescript
 import { useRemoteHook } from '@scalprum/react-core';
 
 const { hookResult, loading, error } = useRemoteHook<FedModulesStoreResult>({
-  scope: 'frontendStarterApp',
+  scope: 'platformSettingsUi',
   module: './frontendModules/useFedModulesStore',
   args: undefined, // Optional: omit if hook takes no arguments
 });
@@ -93,7 +89,7 @@ To make hooks consumable across micro-frontends, expose them via Module Federati
 
 ```javascript
 module.exports = {
-  appUrl: '/staging/starter',
+  appUrl: '/settings',
   moduleFederation: {
     exposes: {
       // Expose main root app
@@ -381,7 +377,7 @@ const FedModulesDataContainer: React.FC = () => {
     loading: storeLoading,
     error: storeError,
   } = useRemoteHook<FedModulesStoreResult>({
-    scope: 'frontendStarterApp',  // Module federation scope
+    scope: 'platformSettingsUi',  // Module federation scope
     module: './frontendModules/useFedModulesStore',  // Exposed module path
     args: undefined,  // Optional: omit if hook takes no arguments
   });
@@ -402,7 +398,7 @@ const FedModulesDataContainer: React.FC = () => {
 
 - **`scope`**: The Module Federation scope name (typically your app name in camelCase)
   - Find this in your `package.json` under `insights.appname` (converted to camelCase)
-  - Example: `"frontend-starter-app"` becomes `"frontendStarterApp"`
+  - Example: `"platform-settings-ui"` becomes `"platformSettingsUi"`
 
 - **`module`**: The exposed module path from `fec.config.js`
   - Must match exactly what's in `moduleFederation.exposes`
@@ -551,7 +547,7 @@ Create **multiple specialized hooks** from the same store:
 ```typescript
 // In a filter input component
 const { filterHook } = useRemoteHook<FedModulesFilterResult>({
-  scope: 'frontendStarterApp',
+  scope: 'platformSettingsUi',
   module: './frontendModules/useFedModulesFilter',  // Optimized filter hook
 });
 
@@ -630,7 +626,7 @@ Pass your return type to `useRemoteHook`:
 
 ```typescript
 const { hookResult } = useRemoteHook<FedModulesStoreResult>({
-  scope: 'frontendStarterApp',
+  scope: 'platformSettingsUi',
   module: './frontendModules/useFedModulesStore',
 });
 
@@ -792,7 +788,7 @@ export const useCounterStore = () => {
 
 ```javascript
 module.exports = {
-  appUrl: '/staging/starter',
+  appUrl: '/settings',
   moduleFederation: {
     exposes: {
       './RootApp': './src/AppEntry',
@@ -817,7 +813,7 @@ interface CounterStoreResult {
 
 const CounterDisplay: React.FC = () => {
   const { hookResult, loading, error } = useRemoteHook<CounterStoreResult>({
-    scope: 'frontendStarterApp',
+    scope: 'platformSettingsUi',
     module: './hooks/useCounterStore',
     // args parameter omitted - hook takes no arguments
   });
@@ -1055,7 +1051,7 @@ const { hookResult } = useRemoteHook({
 ```typescript
 // ❌ Bad - using package name with dashes
 const { hookResult } = useRemoteHook({
-  scope: 'frontend-starter-app',  // Wrong!
+  scope: 'platform-settings-ui',  // Wrong!
   module: './hooks/useStore',
 });
 ```
@@ -1065,14 +1061,14 @@ const { hookResult } = useRemoteHook({
 ```typescript
 // ✅ Good - camelCase scope name
 const { hookResult } = useRemoteHook({
-  scope: 'frontendStarterApp',  // Correct!
+  scope: 'platformSettingsUi',  // Correct!
   module: './hooks/useStore',
 });
 ```
 
 Find your scope name:
 1. Check `package.json` → `insights.appname`
-2. Convert to camelCase: `frontend-starter-app` → `frontendStarterApp`
+2. Convert to camelCase: `platform-settings-ui` → `platformSettingsUi`
 
 ### 3. Module Path Mismatch
 

@@ -1,9 +1,9 @@
-# CodeRabbit Configuration for Frontend Starter App
-# HCC (Hybrid Cloud Console) Frontend Application - Seed/Template Repository
-# Last updated: 2026-03-26
+# CodeRabbit Configuration for Platform Settings UI
+# HCC (Hybrid Cloud Console) Frontend Application
+# Last updated: 2026-07-23
 #
-# This is a template repository used by HCC teams to bootstrap new applications.
-# Reviews focus on maintaining template quality and demonstrating best practices.
+# Consolidated platform settings application (notifications, sources, user-preferences).
+# Reviews focus on code quality, pattern adherence, and best practices.
 
 # Language for reviews and chat responses
 language: "en-US"
@@ -139,12 +139,6 @@ reviews:
         Stories must have a title in meta. Play functions should use
         within() + role queries, not canvasElement.querySelector().
         Use userEvent.setup() for interactions.
-
-    - path: "src/features/roles/**"
-      instructions: |
-        This is a REFERENCE GUIDE, not production code. Changes here should
-        maintain the teaching quality of the code. Every pattern demonstrated
-        should be the recommended approach.
 
     - path: "eslint-rules/**"
       instructions: |
@@ -311,8 +305,8 @@ reviews:
           - Tests use @testing-library/react for DOM interactions (not enzyme)
           - Snapshot tests are meaningful and minimal (not just for coverage)
 
-          **SOMETIMES REQUIRED - Component/Integration Tests (Cypress):**
-          Consider requiring Cypress component tests when:
+          **SOMETIMES REQUIRED - Component/Integration Tests (Storybook):**
+          Consider requiring Storybook stories with play functions when:
           - New UI components are added (especially complex interactive components)
           - Existing components have significant behavior changes
           - Complex user interactions need testing (multi-step forms, drag-drop, etc.)
@@ -433,4 +427,4 @@ knowledge_base:
     scope: "auto"
 
 # Tone instructions for reviews
-tone_instructions: "Template repository for HCC teams. Be professional, educational, and constructive. Focus on maintainability and best practices. Distinguish critical issues from nice-to-haves. Explain why behind suggestions."
+tone_instructions: "Consolidated platform settings application for HCC. Be professional, educational, and constructive. Focus on maintainability and best practices. Distinguish critical issues from nice-to-haves. Explain why behind suggestions."

@@ -6,15 +6,23 @@ all co-located.
 
 ```
 src/features/
-├── sample/              # The starter app's example feature
-│   ├── SamplePage.tsx
+├── <feature-name>/
+│   ├── <FeatureName>Page.tsx
+│   ├── <FeatureName>Page.stories.tsx
 │   ├── components/
-│   ├── data/            # queries, mocks (added in later PRs)
+│   │   ├── <Component>.tsx
+│   │   └── <Component>.stories.tsx
+│   ├── data/
+│   │   ├── queries/     # TanStack Query hooks
+│   │   └── mocks/       # MSW handlers for Storybook
+│   ├── hooks/
 │   └── README.md
 └── README.md            # This file
 ```
 
-When creating a new app from this template, keep this structure:
+Rules:
 - One folder per feature
 - Co-locate everything the feature needs
 - Features should not import from each other
+- Use ServiceContext for Chrome dependencies (see `src/shared/ServiceContextDI.mdx`)
+- Use TanStack Query for server state (see `src/shared/WHY-TanStackQuery.md`)

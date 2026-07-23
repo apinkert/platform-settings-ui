@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
   annotations:
-    build.appstudio.openshift.io/repo: https://github.com/RedHatInsights/frontend-starter-app?rev={{revision}}
+    build.appstudio.openshift.io/repo: https://github.com/RedHatInsights/platform-settings-ui?rev={{revision}}
     build.appstudio.redhat.com/commit_sha: '{{revision}}'
     build.appstudio.redhat.com/pull_request_number: '{{pull_request_number}}'
     build.appstudio.redhat.com/target_branch: '{{target_branch}}'
@@ -12,10 +12,10 @@ metadata:
     pipelinesascode.tekton.dev/pipeline: https://raw.githubusercontent.com/RedHatInsights/konflux-pipelines/refs/heads/main/pipelines/platform-ui/docker-build-run-all-tests.yaml
   creationTimestamp: null
   labels:
-    appstudio.openshift.io/application: frontend-starter-app
-    appstudio.openshift.io/component: frontend-starter-app
+    appstudio.openshift.io/application: platform-settings-ui
+    appstudio.openshift.io/component: platform-settings-ui
     pipelines.appstudio.openshift.io/type: build
-  name: frontend-starter-app-on-pull-request
+  name: platform-settings-ui-on-pull-request
   namespace: rh-platform-experien-tenant
 spec:
   params:
@@ -24,7 +24,7 @@ spec:
   - name: revision
     value: '{{revision}}'
   - name: output-image
-    value: quay.io/redhat-user-workloads/rh-platform-experien-tenant/frontend-starter-app/frontend-starter-app:on-pr-{{revision}}
+    value: quay.io/redhat-user-workloads/rh-platform-experien-tenant/platform-settings-ui/platform-settings-ui:on-pr-{{revision}}
   - name: image-expires-after
     value: 5d
   - name: dockerfile
@@ -82,9 +82,9 @@ spec:
       echo "Running Playwright tests..."
       npx playwright test
   - name: e2e-credentials-secret
-    value: frontend-starter-app-credentials-secret
+    value: platform-settings-ui-credentials-secret
   - name: frontend-proxy-routes-configmap
-    value: frontend-starter-app-dev-proxy-caddyfile-v2
+    value: platform-settings-ui-dev-proxy-caddyfile-v2
   pipelineRef:
     resolver: git
     params:
@@ -95,10 +95,10 @@ spec:
     - name: pathInRepo
       value: pipelines/platform-ui/docker-build-run-all-tests.yaml
   taskRunTemplate:
-    serviceAccountName: build-pipeline-frontend-starter-app
+    serviceAccountName: build-pipeline-platform-settings-ui
   taskRunSpecs:
     - pipelineTaskName: run-e2e-tests
-      serviceAccountName: build-pipeline-frontend-starter-app
+      serviceAccountName: build-pipeline-platform-settings-ui
       podTemplate:
         # Override /etc/hosts to redirect stage.foo.redhat.com to localhost
         hostAliases:

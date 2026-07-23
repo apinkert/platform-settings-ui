@@ -34,7 +34,7 @@ module.exports = defineConfig(
       parser: tsParser,
     },
     plugins: {
-      'starter-local': {
+      'platform-settings-local': {
         rules: {
           'require-use-table-state': requireUseTableState,
           'enforce-story-patterns': enforceStoryPatterns,
@@ -47,7 +47,7 @@ module.exports = defineConfig(
       'react/react-in-jsx-scope': 'off',
       'react/jsx-uses-react': 'off',
       '@typescript-eslint/no-unused-vars': 'error',
-      'starter-local/require-use-table-state': 'error',
+      'platform-settings-local/require-use-table-state': 'error',
       'no-restricted-imports': [
         'error',
         {
@@ -66,8 +66,8 @@ module.exports = defineConfig(
   {
     files: ['src/**/*.stories.@(ts|tsx)'],
     rules: {
-      'starter-local/enforce-story-patterns': 'error',
-      'starter-local/no-direct-user-type': 'error',
+      'platform-settings-local/enforce-story-patterns': 'error',
+      'platform-settings-local/no-direct-user-type': 'error',
     },
   },
 );

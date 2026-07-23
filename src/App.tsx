@@ -33,7 +33,7 @@ const App = () => {
   const { updateDocumentTitle } = useChrome();
 
   useEffect(() => {
-    updateDocumentTitle('Starter app');
+    updateDocumentTitle('Platform Settings');
   }, []);
 
   return (

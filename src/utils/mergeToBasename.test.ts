@@ -1,7 +1,7 @@
 import { mergeToBasename } from './mergeToBasename';
 
 describe('mergeToBasename', () => {
-  const basename = '/staging/starter';
+  const basename = '/settings';
 
   describe('with empty basename', () => {
     it('returns string path unchanged', () => {
@@ -17,28 +17,26 @@ describe('mergeToBasename', () => {
 
   describe('with string paths', () => {
     it('prepends basename to absolute path', () => {
-      expect(mergeToBasename('/roles', basename)).toBe(
-        '/staging/starter/roles',
-      );
+      expect(mergeToBasename('/roles', basename)).toBe('/settings/roles');
     });
 
     it('prepends basename to relative path', () => {
-      expect(mergeToBasename('roles', basename)).toBe('/staging/starter/roles');
+      expect(mergeToBasename('roles', basename)).toBe('/settings/roles');
     });
 
     it('prepends basename to root path', () => {
-      expect(mergeToBasename('/', basename)).toBe('/staging/starter/');
+      expect(mergeToBasename('/', basename)).toBe('/settings/');
     });
 
     it('does not double-prepend if already prefixed', () => {
-      expect(mergeToBasename('/staging/starter/roles', basename)).toBe(
-        '/staging/starter/roles',
+      expect(mergeToBasename('/settings/roles', basename)).toBe(
+        '/settings/roles',
       );
     });
 
     it('handles nested paths', () => {
       expect(mergeToBasename('/roles/uuid-123/edit', basename)).toBe(
-        '/staging/starter/roles/uuid-123/edit',
+        '/settings/roles/uuid-123/edit',
       );
     });
   });
@@ -46,7 +44,7 @@ describe('mergeToBasename', () => {
   describe('with Location objects', () => {
     it('prepends basename to pathname', () => {
       expect(mergeToBasename({ pathname: '/roles' }, basename)).toEqual({
-        pathname: '/staging/starter/roles',
+        pathname: '/settings/roles',
       });
     });
 
@@ -57,7 +55,7 @@ describe('mergeToBasename', () => {
           basename,
         ),
       ).toEqual({
-        pathname: '/staging/starter/roles',
+        pathname: '/settings/roles',
         search: '?q=admin',
         hash: '#top',
       });
@@ -65,14 +63,14 @@ describe('mergeToBasename', () => {
 
     it('does not double-prepend if already prefixed', () => {
       expect(
-        mergeToBasename({ pathname: '/staging/starter/roles' }, basename),
-      ).toEqual({ pathname: '/staging/starter/roles' });
+        mergeToBasename({ pathname: '/settings/roles' }, basename),
+      ).toEqual({ pathname: '/settings/roles' });
     });
 
     it('handles nested paths', () => {
       expect(
         mergeToBasename({ pathname: '/roles/uuid-123/edit' }, basename),
-      ).toEqual({ pathname: '/staging/starter/roles/uuid-123/edit' });
+      ).toEqual({ pathname: '/settings/roles/uuid-123/edit' });
     });
 
     it('returns Location unchanged when pathname is missing', () => {

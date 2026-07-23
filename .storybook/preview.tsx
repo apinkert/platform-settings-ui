@@ -50,8 +50,8 @@ const preview: Preview = {
       });
       return (
         <StorybookMockProvider
-          bundle="staging"
-          app="starter"
+          bundle="settings"
+          app="platform-settings"
           environment={
             parameters.environment === 'production' ? 'production' : 'stage'
           }

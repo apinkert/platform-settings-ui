@@ -38,12 +38,7 @@ See `src/shared/WHY-TanStackQuery.md`.
 
 ## Custom ESLint Rules
 
-Three local rules under `starter-local/*` — see `eslint-rules/README.md`.
-
-## Reference Guide
-
-`src/features/roles/` is a REFERENCE GUIDE demonstrating all patterns.
-Replace it with your own features when creating a new app.
+Three local rules under `platform-settings-local/*` — see `eslint-rules/README.md`.
 
 ## File Naming
 

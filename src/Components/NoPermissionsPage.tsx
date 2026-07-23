@@ -12,7 +12,7 @@ const NoPermissionsPage = () => {
 
   return (
     <main>
-      <NotAuthorized serviceName="Sample app" />
+      <NotAuthorized serviceName="Platform Settings" />
     </main>
   );
 };
