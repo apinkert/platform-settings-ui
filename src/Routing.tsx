@@ -13,6 +13,12 @@ const NoPermissionsPage = lazy(
       /* webpackChunkName: "NoPermissionsPage" */ './Components/NoPermissionsPage'
     ),
 );
+const EventLogPage = lazy(
+  () =>
+    import(
+      /* webpackChunkName: "EventLogPage" */ './features/alert-manager/features/event-log/EventLogPage'
+    ),
+);
 
 const LandingPage = () => (
   <Bullseye>
@@ -28,6 +34,10 @@ const routes = [
   {
     path: 'oops',
     element: OopsPage,
+  },
+  {
+    path: 'eventlog',
+    element: EventLogPage,
   },
   {
     path: '/',

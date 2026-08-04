@@ -1,0 +1,116 @@
+import type { Meta, StoryObj } from '@storybook/react-webpack5';
+import { expect, within } from 'storybook/test';
+import { HttpResponse, http } from 'msw';
+import EventLogPage from './EventLogPage';
+import { createBundlesHandlers } from '../../data/mocks/bundles';
+import { createEventsHandlers, eventsDb } from '../../data/mocks/events';
+import { seedEvents } from '../../data/mocks/seed';
+
+const meta: Meta<typeof EventLogPage> = {
+  title: 'features/alert-manager/EventLogPage',
+  component: EventLogPage,
+  parameters: {
+    msw: { handlers: [...createEventsHandlers(), ...createBundlesHandlers()] },
+  },
+  beforeEach: () => {
+    eventsDb.reset();
+  },
+};
+
+export default meta;
+type Story = StoryObj<typeof EventLogPage>;
+
+export const Default: Story = {
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+
+    await step('Verify page header renders', async () => {
+      const heading = await canvas.findByText('Event log');
+      await expect(heading).toBeInTheDocument();
+    });
+
+    await step('Verify subtitle renders', async () => {
+      const subtitle = await canvas.findByText(
+        'View events firing in your organization.',
+      );
+      await expect(subtitle).toBeInTheDocument();
+    });
+
+    await step('Verify table loads with events', async () => {
+      const firstEvent = await canvas.findByText(seedEvents[0].event_type);
+      await expect(firstEvent).toBeInTheDocument();
+    });
+  },
+};
+
+export const NonAdmin: Story = {
+  parameters: {
+    services: {
+      isOrgAdmin: false,
+    },
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+
+    await step('Verify unauthorized access state is shown', async () => {
+      const heading = await canvas.findByText(/you do not have access/i);
+      await expect(heading).toBeInTheDocument();
+    });
+
+    await step('Verify contact admin body text', async () => {
+      const body = await canvas.findByText(
+        /contact your organization administrator/i,
+      );
+      await expect(body).toBeInTheDocument();
+    });
+  },
+};
+
+export const Empty: Story = {
+  parameters: {
+    msw: {
+      handlers: [
+        ...createBundlesHandlers(),
+        http.get('/api/notifications/v2/notifications/events', () =>
+          HttpResponse.json({
+            data: [],
+            links: {},
+            meta: { count: 0 },
+          }),
+        ),
+      ],
+    },
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+
+    await step('Verify page header still renders', async () => {
+      const heading = await canvas.findByText('Event log');
+      await expect(heading).toBeInTheDocument();
+    });
+  },
+};
+
+export const Error: Story = {
+  parameters: {
+    msw: {
+      handlers: [
+        ...createBundlesHandlers(),
+        http.get('/api/notifications/v2/notifications/events', () =>
+          HttpResponse.json(
+            { message: 'Internal Server Error' },
+            { status: 500 },
+          ),
+        ),
+      ],
+    },
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+
+    await step('Verify page header still renders', async () => {
+      const heading = await canvas.findByText('Event log');
+      await expect(heading).toBeInTheDocument();
+    });
+  },
+};

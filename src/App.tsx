@@ -1,4 +1,5 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { IntlProvider } from 'react-intl';
 import NotificationsProvider from '@redhat-cloud-services/frontend-components-notifications/NotificationsProvider';
 import { useAddNotification } from '@redhat-cloud-services/frontend-components-notifications/hooks';
 import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
@@ -13,9 +14,20 @@ import './App.scss';
 const AppWithServices = () => {
   const chrome = useChrome();
   const addNotification = useAddNotification();
+  const [isOrgAdmin, setIsOrgAdmin] = useState(false);
+
+  useEffect(() => {
+    chrome.auth.getUser().then((user) => {
+      setIsOrgAdmin(
+        (user as { identity?: { user?: { is_org_admin?: boolean } } })?.identity
+          ?.user?.is_org_admin ?? false,
+      );
+    });
+  }, [chrome]);
+
   const services = useMemo(
-    () => createBrowserServices(chrome, addNotification),
-    [chrome, addNotification],
+    () => createBrowserServices(chrome, addNotification, isOrgAdmin),
+    [chrome, addNotification, isOrgAdmin],
   );
 
   return (
@@ -37,9 +49,11 @@ const App = () => {
   }, []);
 
   return (
-    <NotificationsProvider>
-      <AppWithServices />
-    </NotificationsProvider>
+    <IntlProvider locale="en" defaultLocale="en">
+      <NotificationsProvider>
+        <AppWithServices />
+      </NotificationsProvider>
+    </IntlProvider>
   );
 };
 

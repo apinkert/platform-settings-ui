@@ -2,6 +2,7 @@ import type { Preview } from '@storybook/react-webpack5';
 import '@patternfly/react-core/dist/styles/base.css';
 import '@patternfly/patternfly/patternfly-addons.css';
 import React, { useMemo } from 'react';
+import { IntlProvider } from 'react-intl';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import NotificationsProvider from '@redhat-cloud-services/frontend-components-notifications/NotificationsProvider';
 import { useAddNotification } from '@redhat-cloud-services/frontend-components-notifications/hooks';
@@ -17,6 +18,7 @@ const baseMockServices: Omit<AppServices, 'addNotification' | 'notify'> = {
   appAction: () => {},
   getToken: async () => 'mock-token',
   environment: 'stage',
+  isOrgAdmin: true,
   fetchCVEs: async () => [],
   axios: Axios.create(),
 };
@@ -41,6 +43,18 @@ const ServiceProviderWithNotifications: React.FC<{
 
 const preview: Preview = {
   ...hccPreviewDefaults,
+  parameters: {
+    ...hccPreviewDefaults.parameters,
+    a11y: {
+      config: {
+        rules: [
+          { id: 'landmark-one-main', enabled: false },
+          { id: 'page-has-heading-one', enabled: false },
+          { id: 'region', enabled: false },
+        ],
+      },
+    },
+  },
   decorators: [
     (Story, { parameters }) => {
       const queryClient = new QueryClient({
@@ -56,13 +70,15 @@ const preview: Preview = {
             parameters.environment === 'production' ? 'production' : 'stage'
           }
         >
-          <NotificationsProvider>
-            <ServiceProviderWithNotifications overrides={parameters.services}>
-              <QueryClientProvider client={queryClient}>
-                <Story />
-              </QueryClientProvider>
-            </ServiceProviderWithNotifications>
-          </NotificationsProvider>
+          <IntlProvider locale="en" defaultLocale="en">
+            <NotificationsProvider>
+              <ServiceProviderWithNotifications overrides={parameters.services}>
+                <QueryClientProvider client={queryClient}>
+                  <Story />
+                </QueryClientProvider>
+              </ServiceProviderWithNotifications>
+            </NotificationsProvider>
+          </IntlProvider>
         </StorybookMockProvider>
       );
     },
