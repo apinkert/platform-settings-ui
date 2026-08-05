@@ -11,39 +11,12 @@ objects:
       name: platform-settings-ui
     spec:
       feoConfigEnabled: true
-      serviceTiles:
-        - id: platform-settings-link
-          section: settings
-          group: settings
-          title: Platform Settings
-          href: /settings
-          description: Manage notifications, sources, and user preferences
-          icon: CogIcon
-      searchEntries:
-        - id: "platform-settings"
-          title: "Platform Settings"
-          href: /settings
-          description: "Manage notifications, sources, and user preferences"
-          alt_title:
-            - Platform Settings
-            - Settings
-            - Notifications
-            - Sources
-            - User Preferences
-      bundleSegments:
-        - segmentId: platform-settings
-          bundleId: settings
-          position: 100
-          navItems:
-            - id: platform-settings-ui
-              title: Platform Settings
-              href: /settings
-      API:
-        versions:
-          - v1
       envName: ${ENV_NAME}
       title: Platform Settings
       deploymentRepo: https://github.com/RedHatInsights/platform-settings-ui
+      API:
+        versions:
+          - v1
       frontend:
         paths:
           - /apps/platform-settings-ui
@@ -52,11 +25,65 @@ objects:
 
       module:
         manifestLocation: '/apps/platform-settings-ui/fed-mods.json'
+        defaultDocumentTitle: 'Platform Settings | Settings'
         modules:
-          - id: 'overview'
+          - id: platform-settings-root
             module: './RootApp'
             routes:
               - pathname: /settings
+              - pathname: /settings/alertmanager
+              - pathname: /settings/eventlog
+              - pathname: /settings/integrations
+
+      bundleSegments:
+        - segmentId: platform-settings
+          bundleId: settings
+          position: 200
+          navItems:
+            - id: alert-manager
+              title: Alert Manager
+              href: /settings/alertmanager
+            - id: eventlog
+              title: Event Log
+              href: /settings/eventlog
+            - id: data-integration
+              title: Data Integration
+              href: /settings/integrations
+
+      searchEntries:
+        - id: platform-settings-alertmanager
+          title: Alert Manager
+          href: /settings/alertmanager
+          description: Manage alert configurations and notification settings for your organization.
+          alt_title:
+            - Alert Manager
+            - Alerts
+            - Notifications
+        - id: platform-settings-eventlog
+          title: Event Log
+          href: /settings/eventlog
+          description: View and filter platform event logs for your organization.
+          alt_title:
+            - Event Log
+            - Events
+            - Notifications Log
+        - id: platform-settings-integrations
+          title: Data Integration
+          href: /settings/integrations
+          description: Manage data sources and integrations for the Hybrid Cloud Console.
+          alt_title:
+            - Data Integration
+            - Integrations
+            - Sources
+
+      serviceTiles:
+        - section: integrations-notifications
+          group: settings
+          id: platform-settings-link
+          href: /settings
+          title: Platform Settings
+          description: Manage notifications, integrations, and user preferences for the Hybrid Cloud Console.
+          icon: CogIcon
 
 parameters:
   - name: ENV_NAME
