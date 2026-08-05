@@ -92,7 +92,7 @@ objects:
           href: /settings/alertmanager/capacity-management
           title: Alert Preferences
           description: A standardized way of notifying users of events for supported services on the Hybrid Cloud Console.
-          icon: PlaceholderIcon
+          icon: OutlinedUserIcon
         - section: systemConfiguration
           group: settings
           id: configurations-alert-manager
@@ -106,7 +106,7 @@ objects:
           href: /settings/alertmanager/capacity-management
           title: Alert Preferences
           description: A standardized way of notifying users of events for supported services on the Hybrid Cloud Console.
-          icon: PlaceholderIcon
+          icon: OutlinedUserIcon
 
 parameters:
   - name: ENV_NAME
