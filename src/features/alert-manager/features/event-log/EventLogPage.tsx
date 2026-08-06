@@ -54,7 +54,12 @@ const EventLogPage: React.FC = () => {
   );
 
   if (!isOrgAdmin) {
-    return <NotAuthorized serviceName="Event Log" toLandingPageUrl="/settings/overview" />;
+    return (
+      <NotAuthorized
+        serviceName="Event Log"
+        toLandingPageUrl="/settings/overview"
+      />
+    );
   }
 
   const datePresetLabels: Record<DatePreset, string> = {

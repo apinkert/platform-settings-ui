@@ -10,7 +10,7 @@ alert-manager/
 │   ├── api/
 │   │   └── events.ts              # APIFactory wrapper for notifications client
 │   ├── queries/
-│   │   └── events.ts              # useEvents() + useEvent() hooks, query key factory
+│   │   └── events.ts              # useEvents() hook, query key factory
 │   ├── mocks/
 │   │   ├── seed.ts                # Seed data for MSW handlers and story assertions
 │   │   └── events.ts              # MSW v2 handler factories
@@ -18,7 +18,7 @@ alert-manager/
 │       └── events.types.ts        # Strongly-typed event log interfaces
 ├── features/
 │   └── event-log/
-│       ├── EventLogPage.tsx           # Page shell (PageHeader, banner, toolbar extras)
+│       ├── EventLogPage.tsx           # Page shell (PageHeader, date range toolbar)
 │       ├── EventLogPage.stories.tsx   # Storybook stories with play functions
 │       └── components/
 │           └── EventLogTable.tsx      # useTableState + TableView + filters
@@ -31,7 +31,6 @@ Uses `@redhat-cloud-services/notifications-client` via `APIFactory`. The authent
 ### Query Hooks
 
 - `useEvents(params?)` — paginated event log list with filter support and `keepPreviousData` for smooth pagination.
-- `useEvent(id)` — single event detail lookup.
 
 ### Query Keys
 
@@ -39,8 +38,6 @@ Uses `@redhat-cloud-services/notifications-client` via `APIFactory`. The authent
 eventsKeys.all          // ['events']
 eventsKeys.lists()      // ['events', 'list']
 eventsKeys.list(p)      // ['events', 'list', params]
-eventsKeys.details()    // ['events', 'detail']
-eventsKeys.detail(id)   // ['events', 'detail', id]
 ```
 
 ### MSW Mocks
@@ -51,9 +48,8 @@ eventsKeys.detail(id)   // ['events', 'detail', id]
 
 The Event Log page (`features/event-log/EventLogPage.tsx`) displays a paginated table of notification events with:
 
-- **PageHeader** with bell icon, title, subtitle, and "Learn more" link
-- **Admin/non-admin behavior** — non-admins see an info banner and a disabled "Only show events impacting me" checkbox
-- **Filters** — Event name (text), Action Type, Action Status, Severity (checkboxes)
+- **Admin gate** — non-admin users see a `NotAuthorized` screen (pending Kessel `EVENTS_VIEW` permission rollout)
+- **Filters** — Event name (text), Service, Severity (checkboxes)
 - **Date range** — Preset selector (Today, Yesterday, Last 7/14 days)
 - **Severity column** — Colored labels with PatternFly severity icons
 - **Notifiers column** — Grouped action badges by endpoint type
