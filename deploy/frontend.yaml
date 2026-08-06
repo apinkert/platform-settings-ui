@@ -45,12 +45,27 @@ objects:
             - id: alert-manager
               title: Alert Manager
               href: /settings/alertmanager
+              permissions:
+                - method: featureFlag
+                  args:
+                    - platform.settings.redesign
+                    - true
             - id: eventlog
               title: Event Log
               href: /settings/eventlog
+              permissions:
+                - method: featureFlag
+                  args:
+                    - platform.settings.redesign
+                    - true
             - id: data-integration
               title: Data Integration
               href: /settings/data-integrations
+              permissions:
+                - method: featureFlag
+                  args:
+                    - platform.settings.redesign
+                    - true
 
       searchEntries:
         - id: platform-settings-alertmanager
@@ -61,6 +76,11 @@ objects:
             - Alert Manager
             - Alerts
             - Notifications
+          permissions:
+            - method: featureFlag
+              args:
+                - platform.settings.redesign
+                - true
         - id: platform-settings-eventlog
           title: Event Log
           href: /settings/eventlog
@@ -69,6 +89,11 @@ objects:
             - Event Log
             - Events
             - Notifications Log
+          permissions:
+            - method: featureFlag
+              args:
+                - platform.settings.redesign
+                - true
         - id: platform-settings-integrations
           title: Data Integration
           href: /settings/data-integrations
@@ -77,6 +102,11 @@ objects:
             - Data Integration
             - Integrations
             - Sources
+          permissions:
+            - method: featureFlag
+              args:
+                - platform.settings.redesign
+                - true
 
       serviceTiles:
         - section: integrations-notifications
@@ -86,6 +116,11 @@ objects:
           title: Alert Manager
           description: Manage alert configurations and event logs for supported services on the Hybrid Cloud Console.
           icon: PlaceholderIcon
+          permissions:
+            - method: featureFlag
+              args:
+                - platform.settings.redesign
+                - true
         - section: integrations-notifications
           group: settings
           id: settings-alert-preferences
@@ -93,6 +128,11 @@ objects:
           title: Alert Preferences
           description: A standardized way of notifying users of events for supported services on the Hybrid Cloud Console.
           icon: OutlinedUserIcon
+          permissions:
+            - method: featureFlag
+              args:
+                - platform.settings.redesign
+                - true
         - section: systemConfiguration
           group: settings
           id: configurations-alert-manager
@@ -100,6 +140,11 @@ objects:
           title: Alert Manager
           description: Manage alert configurations and event logs for supported services on the Hybrid Cloud Console.
           icon: PlaceholderIcon
+          permissions:
+            - method: featureFlag
+              args:
+                - platform.settings.redesign
+                - true
         - section: systemConfiguration
           group: settings
           id: configurations-alert-preferences
@@ -107,6 +152,11 @@ objects:
           title: Alert Preferences
           description: A standardized way of notifying users of events for supported services on the Hybrid Cloud Console.
           icon: OutlinedUserIcon
+          permissions:
+            - method: featureFlag
+              args:
+                - platform.settings.redesign
+                - true
 
 parameters:
   - name: ENV_NAME
