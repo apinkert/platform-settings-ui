@@ -8,7 +8,7 @@ import {
   SelectOption,
 } from '@patternfly/react-core';
 import { PageHeader } from '@patternfly/react-component-groups';
-import UnauthorizedAccess from '@patternfly/react-component-groups/dist/dynamic/UnauthorizedAccess';
+import { NotAuthorized } from '@redhat-cloud-services/frontend-components/NotAuthorized';
 import { useAppServices } from '../../../../shared/ServiceContext';
 import EventLogTable from './components/EventLogTable';
 import messages from './messages';
@@ -53,6 +53,10 @@ const EventLogPage: React.FC = () => {
     [datePreset],
   );
 
+  if (!isOrgAdmin) {
+    return <NotAuthorized serviceName="Event Log" toLandingPageUrl="/settings/overview" />;
+  }
+
   const datePresetLabels: Record<DatePreset, string> = {
     today: intl.formatMessage(messages.dateToday),
     yesterday: intl.formatMessage(messages.dateYesterday),
@@ -88,31 +92,6 @@ const EventLogPage: React.FC = () => {
       </SelectList>
     </Select>
   );
-
-  if (!isOrgAdmin) {
-    return (
-      <>
-        <PageHeader
-          title={intl.formatMessage(messages.pageTitle)}
-          subtitle={intl.formatMessage(messages.pageSubtitle)}
-          icon={
-            <img
-              src="/apps/frontend-assets/technology-icons/notifications.svg"
-              alt=""
-              width={48}
-              height={48}
-            />
-          }
-        />
-        <PageSection>
-          <UnauthorizedAccess
-            serviceName={intl.formatMessage(messages.pageTitle)}
-            bodyText={intl.formatMessage(messages.forbiddenBody)}
-          />
-        </PageSection>
-      </>
-    );
-  }
 
   return (
     <>

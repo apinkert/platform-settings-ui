@@ -153,10 +153,9 @@ export default defineMessages({
     id: 'eventLog.rowActions.label',
     defaultMessage: 'Row actions',
   },
-  forbiddenBody: {
-    id: 'eventLog.forbidden.body',
-    defaultMessage:
-      'Contact your organization administrator(s) for more information.',
+  orgAdminRequired: {
+    id: 'eventLog.orgAdminRequired',
+    defaultMessage: 'Org admin access required to view all organization events',
   },
   emptyStateNoResultsTitle: {
     id: 'eventLog.emptyState.noResults.title',

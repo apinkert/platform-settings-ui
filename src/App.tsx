@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { IntlProvider } from 'react-intl';
+import { Bullseye, Spinner } from '@patternfly/react-core';
 import NotificationsProvider from '@redhat-cloud-services/frontend-components-notifications/NotificationsProvider';
 import { useAddNotification } from '@redhat-cloud-services/frontend-components-notifications/hooks';
 import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
@@ -14,21 +15,29 @@ import './App.scss';
 const AppWithServices = () => {
   const chrome = useChrome();
   const addNotification = useAddNotification();
-  const [isOrgAdmin, setIsOrgAdmin] = useState(false);
+  const [isOrgAdmin, setIsOrgAdmin] = useState<boolean | undefined>(undefined);
 
   useEffect(() => {
     chrome.auth.getUser().then((user) => {
-      setIsOrgAdmin(
-        (user as { identity?: { user?: { is_org_admin?: boolean } } })?.identity
-          ?.user?.is_org_admin ?? false,
-      );
+      setIsOrgAdmin(user?.identity?.user?.is_org_admin ?? false);
     });
-  }, [chrome]);
+  }, []);
 
   const services = useMemo(
-    () => createBrowserServices(chrome, addNotification, isOrgAdmin),
+    () =>
+      isOrgAdmin !== undefined
+        ? createBrowserServices(chrome, addNotification, isOrgAdmin)
+        : undefined,
     [chrome, addNotification, isOrgAdmin],
   );
+
+  if (!services) {
+    return (
+      <Bullseye>
+        <Spinner />
+      </Bullseye>
+    );
+  }
 
   return (
     <ServiceProvider value={services}>

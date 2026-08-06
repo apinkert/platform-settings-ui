@@ -52,16 +52,11 @@ export const NonAdmin: Story = {
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
-    await step('Verify unauthorized access state is shown', async () => {
-      const heading = await canvas.findByText(/you do not have access/i);
-      await expect(heading).toBeInTheDocument();
-    });
-
-    await step('Verify contact admin body text', async () => {
-      const body = await canvas.findByText(
-        /contact your organization administrator/i,
+    await step('Verify unauthorized screen renders', async () => {
+      const heading = await canvas.findByText(
+        /You do not have access to Event Log/i,
       );
-      await expect(body).toBeInTheDocument();
+      await expect(heading).toBeInTheDocument();
     });
   },
 };

@@ -8,6 +8,7 @@ import {
   Label,
   LabelGroup,
   MenuToggle,
+  Popover,
   Tooltip,
 } from '@patternfly/react-core';
 import {
@@ -491,10 +492,19 @@ const RowActions: React.FC<{
       popperProps={{ position: 'right' }}
     >
       <DropdownList>
-        {isOrgAdmin && (
+        {isOrgAdmin ? (
           <DropdownItem key="org-settings">
             {intl.formatMessage(messages.rowActionOrgSettings)}
           </DropdownItem>
+        ) : (
+          <Popover
+            bodyContent={intl.formatMessage(messages.orgAdminRequired)}
+            triggerAction="hover"
+          >
+            <DropdownItem key="org-settings" isDisabled>
+              {intl.formatMessage(messages.rowActionOrgSettings)}
+            </DropdownItem>
+          </Popover>
         )}
         <DropdownItem key="preferences">
           {intl.formatMessage(messages.rowActionPreferences)}
