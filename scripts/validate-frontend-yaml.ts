@@ -82,13 +82,35 @@ function hasFeatureFlag(permissions: Permission[] | undefined, label: string) {
   }
 }
 
-const raw = readFileSync(YAML_PATH, 'utf-8');
-const doc = parse(raw);
+function isValidHref(href: string): boolean {
+  return href === HREF_PREFIX || href.startsWith(`${HREF_PREFIX}/`);
+}
 
-const spec: FrontendSpec | undefined = doc?.objects?.[0]?.spec;
+let doc: unknown;
+try {
+  const raw = readFileSync(YAML_PATH, 'utf-8');
+  doc = parse(raw);
+} catch (e) {
+  console.error(`FAIL: Could not parse frontend.yaml: ${e instanceof Error ? e.message : e}`);
+  process.exit(1);
+}
+
+const spec: FrontendSpec | undefined = (doc as Record<string, unknown>)?.objects?.[0]?.spec as FrontendSpec | undefined;
 if (!spec) {
   console.error('FAIL: Could not find objects[0].spec in frontend.yaml');
   process.exit(1);
+}
+
+if (!spec.module?.modules || !Array.isArray(spec.module.modules)) {
+  console.error('FAIL: spec.module.modules is missing or not an array');
+  process.exit(1);
+}
+
+for (const [i, mod] of spec.module.modules.entries()) {
+  if (!mod.routes || !Array.isArray(mod.routes)) {
+    console.error(`FAIL: spec.module.modules[${i}].routes is missing or not an array`);
+    process.exit(1);
+  }
 }
 
 const registeredRoutes = new Set(
@@ -115,8 +137,8 @@ for (const segment of spec.bundleSegments) {
       checkDuplicateId(item.id, label);
 
       if (item.href) {
-        if (!item.href.startsWith(HREF_PREFIX)) {
-          error(`${label}: href "${item.href}" does not start with "${HREF_PREFIX}"`);
+        if (!isValidHref(item.href)) {
+          error(`${label}: href "${item.href}" is not "${HREF_PREFIX}" or under "${HREF_PREFIX}/"`);
         }
         if (!registeredRoutes.has(item.href)) {
           error(`${label}: href "${item.href}" has no matching module route`);
@@ -143,8 +165,8 @@ for (const entry of spec.searchEntries ?? []) {
   if (!entry.description) error(`${label}: missing required field "description"`);
   checkDuplicateId(entry.id, label);
 
-  if (entry.href && !entry.href.startsWith(HREF_PREFIX)) {
-    error(`${label}: href "${entry.href}" does not start with "${HREF_PREFIX}"`);
+  if (entry.href && !isValidHref(entry.href)) {
+    error(`${label}: href "${entry.href}" is not "${HREF_PREFIX}" or under "${HREF_PREFIX}/"`);
   }
   if (entry.href && !registeredRoutes.has(entry.href)) {
     error(`${label}: href "${entry.href}" has no matching module route`);
@@ -164,8 +186,8 @@ for (const tile of spec.serviceTiles ?? []) {
   }
   checkDuplicateId(tile.id, label);
 
-  if (tile.href && !tile.href.startsWith(HREF_PREFIX)) {
-    error(`${label}: href "${tile.href}" does not start with "${HREF_PREFIX}"`);
+  if (tile.href && !isValidHref(tile.href)) {
+    error(`${label}: href "${tile.href}" is not "${HREF_PREFIX}" or under "${HREF_PREFIX}/"`);
   }
   if (tile.href && !registeredRoutes.has(tile.href)) {
     error(`${label}: href "${tile.href}" has no matching module route`);
