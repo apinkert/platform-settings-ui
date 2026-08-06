@@ -11,39 +11,12 @@ objects:
       name: platform-settings-ui
     spec:
       feoConfigEnabled: true
-      serviceTiles:
-        - id: platform-settings-link
-          section: settings
-          group: settings
-          title: Platform Settings
-          href: /settings
-          description: Manage notifications, sources, and user preferences
-          icon: CogIcon
-      searchEntries:
-        - id: "platform-settings"
-          title: "Platform Settings"
-          href: /settings
-          description: "Manage notifications, sources, and user preferences"
-          alt_title:
-            - Platform Settings
-            - Settings
-            - Notifications
-            - Sources
-            - User Preferences
-      bundleSegments:
-        - segmentId: platform-settings
-          bundleId: settings
-          position: 100
-          navItems:
-            - id: platform-settings-ui
-              title: Platform Settings
-              href: /settings
-      API:
-        versions:
-          - v1
       envName: ${ENV_NAME}
       title: Platform Settings
       deploymentRepo: https://github.com/RedHatInsights/platform-settings-ui
+      API:
+        versions:
+          - v1
       frontend:
         paths:
           - /apps/platform-settings-ui
@@ -52,11 +25,147 @@ objects:
 
       module:
         manifestLocation: '/apps/platform-settings-ui/fed-mods.json'
+        defaultDocumentTitle: 'Platform Settings | Settings'
         modules:
-          - id: 'overview'
+          - id: platform-settings-root
             module: './RootApp'
             routes:
               - pathname: /settings
+              - pathname: /settings/overview
+              - pathname: /settings/alertmanager
+              - pathname: /settings/eventlog
+              - pathname: /settings/alertmanager/capacity-management
+              - pathname: /settings/data-integrations
+
+      bundleSegments:
+        - segmentId: platform-settings
+          bundleId: settings
+          position: 200
+          title: Platform Settings
+          navItems:
+            - id: overview
+              title: Overview
+              href: /settings/overview
+              permissions:
+                - method: featureFlag
+                  args:
+                    - platform.settings.redesign
+                    - true
+            - id: alert-manager
+              title: Alert Manager
+              href: /settings/alertmanager
+              permissions:
+                - method: featureFlag
+                  args:
+                    - platform.settings.redesign
+                    - true
+            - id: eventlog
+              title: Event Log
+              href: /settings/eventlog
+              permissions:
+                - method: featureFlag
+                  args:
+                    - platform.settings.redesign
+                    - true
+            - id: data-integration
+              title: Data Integration
+              href: /settings/data-integrations
+              permissions:
+                - method: featureFlag
+                  args:
+                    - platform.settings.redesign
+                    - true
+
+      searchEntries:
+        - id: platform-settings-alertmanager
+          title: Alert Manager
+          href: /settings/alertmanager
+          description: Manage alert configurations and notification settings for your organization.
+          alt_title:
+            - Alert Manager
+            - Alerts
+            - Notifications
+          permissions:
+            - method: featureFlag
+              args:
+                - platform.settings.redesign
+                - true
+        - id: platform-settings-eventlog
+          title: Event Log
+          href: /settings/eventlog
+          description: View and filter platform event logs for your organization.
+          alt_title:
+            - Event Log
+            - Events
+            - Notifications Log
+          permissions:
+            - method: featureFlag
+              args:
+                - platform.settings.redesign
+                - true
+        - id: platform-settings-integrations
+          title: Data Integration
+          href: /settings/data-integrations
+          description: Manage data sources and integrations for the Hybrid Cloud Console.
+          alt_title:
+            - Data Integration
+            - Integrations
+            - Sources
+          permissions:
+            - method: featureFlag
+              args:
+                - platform.settings.redesign
+                - true
+
+      serviceTiles:
+        - section: integrations-notifications
+          group: settings
+          id: settings-alert-manager
+          href: /settings/alertmanager
+          title: Alert Manager
+          description: Manage alert configurations and event logs for supported services on the Hybrid Cloud Console.
+          icon: PlaceholderIcon
+          permissions:
+            - method: featureFlag
+              args:
+                - platform.settings.redesign
+                - true
+        - section: integrations-notifications
+          group: settings
+          id: settings-alert-preferences
+          href: /settings/alertmanager/capacity-management
+          title: Alert Preferences
+          description: A standardized way of notifying users of events for supported services on the Hybrid Cloud Console.
+          icon: OutlinedUserIcon
+          permissions:
+            - method: featureFlag
+              args:
+                - platform.settings.redesign
+                - true
+        - section: systemConfiguration
+          group: settings
+          id: configurations-alert-manager
+          href: /settings/alertmanager
+          title: Alert Manager
+          description: Manage alert configurations and event logs for supported services on the Hybrid Cloud Console.
+          icon: PlaceholderIcon
+          permissions:
+            - method: featureFlag
+              args:
+                - platform.settings.redesign
+                - true
+        - section: systemConfiguration
+          group: settings
+          id: configurations-alert-preferences
+          href: /settings/alertmanager/capacity-management
+          title: Alert Preferences
+          description: A standardized way of notifying users of events for supported services on the Hybrid Cloud Console.
+          icon: OutlinedUserIcon
+          permissions:
+            - method: featureFlag
+              args:
+                - platform.settings.redesign
+                - true
 
 parameters:
   - name: ENV_NAME
