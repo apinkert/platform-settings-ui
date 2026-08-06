@@ -31,6 +31,7 @@ objects:
             module: './RootApp'
             routes:
               - pathname: /settings
+              - pathname: /settings/overview
               - pathname: /settings/alertmanager
               - pathname: /settings/eventlog
               - pathname: /settings/alertmanager/capacity-management
@@ -42,6 +43,14 @@ objects:
           position: 200
           title: Platform Settings
           navItems:
+            - id: overview
+              title: Overview
+              href: /settings/overview
+              permissions:
+                - method: featureFlag
+                  args:
+                    - platform.settings.redesign
+                    - true
             - id: alert-manager
               title: Alert Manager
               href: /settings/alertmanager
