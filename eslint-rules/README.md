@@ -1,47 +1,26 @@
 # Custom ESLint Rules
 
-Local ESLint rules registered under the `platform-settings-local` plugin namespace.
-These rules enforce patterns used in this application — they land in
-the same PR as the pattern they govern.
+This project's ESLint rules are provided by the
+[experience-ui-governance](https://github.com/RedHatInsights/experience-ui-governance)
+package under the `experience-ui` plugin namespace.
 
-## Rules
+See `eslint.config.js` for config details and
+`node_modules/experience-ui-governance/eslint-plugin/` for rule source.
 
-### `platform-settings-local/enforce-story-patterns`
+## Active Rules
 
-**Severity:** error
-**Applies to:** `src/**/*.stories.@(ts|tsx)`
+| Rule | Applies to | Purpose |
+|------|-----------|---------|
+| `experience-ui/require-use-table-state` | `src/**` | TableView must be paired with useTableState |
+| `experience-ui/enforce-story-patterns` | `*.stories.tsx` | Bans querySelector and getBy* inside waitFor in play functions |
+| `experience-ui/no-direct-user-type` | `*.stories.tsx` | Enforces clearAndType helper over user.type() |
+| `experience-ui/no-boundary-violations` | `src/**` | Enforces feature island isolation — no cross-feature imports |
+| `experience-ui/no-jest-snapshot` | `src/**` | Bans toMatchSnapshot and toMatchInlineSnapshot |
 
-Enforces correct query patterns in Storybook play functions:
-- Disallows `canvasElement.querySelector()` / `querySelectorAll()` —
-  use `within()` + role/text queries instead
-- Disallows `getBy*` / `getAllBy*` inside `waitFor` callbacks —
-  use `queryBy*` + `expect` inside `waitFor`, or `findBy*` outside
+## Configs
 
-See: `src/shared/StorybookPatterns.mdx`
-
-### `platform-settings-local/require-use-table-state`
-
-**Severity:** error
-**Applies to:** `src/**/*.ts`, `src/**/*.tsx`
-
-Enforces that `TableView` from `@redhat-cloud-services/frontend-components`
-is always paired with the `useTableState` hook. Direct construction of
-table state objects bypasses pagination, sorting, and filter sync logic.
-
-Disable with an inline comment when the hook is used in a wrapper:
-```tsx
-// eslint-disable-next-line platform-settings-local/require-use-table-state -- tableState provided by useRolesTable hook
-```
-
-See: `src/shared/TableView.mdx`
-
-### `platform-settings-local/no-direct-user-type`
-
-**Severity:** error
-**Applies to:** `src/**/*.stories.@(ts|tsx)`
-
-Enforces that Storybook stories use `userEvent.setup()` from
-`storybook/test` instead of directly calling `userEvent.click()` etc.
-Setup-based interaction ensures proper event sequencing and cleanup.
-
-See: `src/shared/interactionHelpers.ts`
+| Config | Applies to | What it adds |
+|--------|-----------|-------------|
+| `recommended` | `src/**` | Core rules + restricted imports (useChrome, PF globals, react-router-dom) |
+| `stories` | `*.stories.tsx` | Story-specific rules + MSW handler restrictions |
+| `data-layer` | `data/queries/**` | DI contract enforcement for data layer hooks |

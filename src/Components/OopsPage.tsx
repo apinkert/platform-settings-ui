@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { Unavailable } from '@redhat-cloud-services/frontend-components/Unavailable';
-import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
+import { useAppServices } from '../shared/ServiceContext';
 
 const OopsPage = () => {
-  const { appAction } = useChrome();
+  const { appAction } = useAppServices();
 
   useEffect(() => {
     appAction('oops-page');

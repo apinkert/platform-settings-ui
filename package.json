@@ -56,6 +56,7 @@
     "@types/react": "^18.3.28",
     "@types/react-dom": "^18.3.7",
     "@typescript-eslint/parser": "^8.59.2",
+    "experience-ui-governance": "github:RedHatInsights/experience-ui-governance",
     "http-server": "^14.1.1",
     "identity-obj-proxy": "^3.0.0",
     "jest-environment-jsdom": "^29.7.0",

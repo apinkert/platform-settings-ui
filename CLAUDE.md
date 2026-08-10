@@ -6,6 +6,15 @@ Consolidated frontend application for the Red Hat Hybrid Cloud Console (HCC) pla
 **Team**: Platform Experience Services
 **Route**: `/settings`
 
+## Governance
+
+This repo follows the [Experience UI Governance](https://github.com/RedHatInsights/experience-ui-governance) standards. The governance package is the canonical source of truth for engineering standards, ESLint rules, CI workflows, and code review configuration.
+
+**Standards**: `node_modules/experience-ui-governance/standards/index.md`
+**ESLint plugin**: `experience-ui-governance/eslint-plugin` (registered as `experience-ui` in eslint.config.js)
+**CI workflows**: Reusable GitHub Actions from `experience-ui-governance/.github/workflows/`
+**Code review**: `.coderabbit.yml` based on the governance template
+
 ## Architecture Overview
 
 HCC frontend applications are **micro-frontends** loaded into the Chrome shell via Module Federation:
@@ -154,6 +163,15 @@ export default MyComponent;
 ### PatternFly Usage
 
 - Use **PatternFly 6 components** for all UI
+- **Dynamic sub-path imports only** — global imports are banned by ESLint:
+  ```tsx
+  // Correct
+  import { Button } from '@patternfly/react-core/dist/dynamic/components/Button';
+  import CheckIcon from '@patternfly/react-icons/dist/js/icons/check-icon';
+
+  // Wrong — will fail lint
+  import { Button } from '@patternfly/react-core';
+  ```
 - For data tables/lists: prefer `@patternfly/react-data-view` (modern API)
 - For common HCC patterns: use `@redhat-cloud-services/frontend-components` (alerts, filters, etc.)
 - Use PatternFly CSS variables for all spacing and colors (no hardcoded values)
@@ -184,15 +202,19 @@ const MyComponent = () => {
 
 Common Chrome services: `updateDocumentTitle()`, `appAction()`, `isBeta()`, navigation events.
 
-### Custom ESLint Rules
+### ESLint Rules (experience-ui-governance)
 
-Three project-specific rules live in `eslint-rules/` and are registered under the `platform-settings-local` plugin namespace:
+ESLint rules are provided by the `experience-ui-governance` package under the `experience-ui` plugin namespace. See `eslint-rules/README.md` for the full list.
 
 | Rule | Purpose |
 |------|---------|
-| `require-use-table-state` | Enforces use of the `useTableState` hook for table components |
-| `enforce-story-patterns` | Enforces Storybook story structure and naming conventions |
-| `no-direct-user-type` | Prevents direct usage of certain user types (use DI instead) |
+| `experience-ui/require-use-table-state` | Enforces use of the `useTableState` hook for table components |
+| `experience-ui/enforce-story-patterns` | Enforces Storybook story structure and naming conventions |
+| `experience-ui/no-direct-user-type` | Prevents direct usage of certain user types (use DI instead) |
+| `experience-ui/no-boundary-violations` | Enforces feature island isolation — no cross-feature imports |
+| `experience-ui/no-jest-snapshot` | Bans toMatchSnapshot and toMatchInlineSnapshot |
+
+Three preset configs (`recommended`, `stories`, `data-layer`) also enforce restricted imports for `useChrome`, PF globals, `react-router-dom`, and feature flag hooks.
 
 ## Testing Strategy
 
