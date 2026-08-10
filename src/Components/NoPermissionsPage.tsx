@@ -8,7 +8,7 @@ const NoPermissionsPage = () => {
 
   useEffect(() => {
     appAction('no-permissions');
-  }, []);
+  }, [appAction]);
 
   return (
     <main>

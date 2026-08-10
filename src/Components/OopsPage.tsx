@@ -7,7 +7,7 @@ const OopsPage = () => {
 
   useEffect(() => {
     appAction('oops-page');
-  }, []);
+  }, [appAction]);
 
   return (
     <main>

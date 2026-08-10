@@ -15,6 +15,6 @@ permissions:
 
 jobs:
   storybook:
-    uses: RedHatInsights/experience-ui-governance/.github/workflows/reusable-storybook.yml@main
+    uses: RedHatInsights/experience-ui-governance/.github/workflows/reusable-storybook.yml@5b1eaab981d12bbaad76737b93049f99df04861c # main
     with:
       node-version: 22

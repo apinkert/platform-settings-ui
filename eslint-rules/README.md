@@ -1,4 +1,4 @@
-# Custom ESLint Rules
+# ESLint Rules (experience-ui-governance)
 
 This project's ESLint rules are provided by the
 [experience-ui-governance](https://github.com/RedHatInsights/experience-ui-governance)

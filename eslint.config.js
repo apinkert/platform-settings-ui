@@ -56,14 +56,31 @@ module.exports = defineConfig(
     },
   },
   {
-    files: [
-      'src/App.tsx',
-      'src/shared/AppServices.browser.ts',
-      'src/Components/AppLink.tsx',
-      'src/hooks/useAppNavigate.ts',
-    ],
+    files: ['src/App.tsx'],
     rules: {
-      'no-restricted-imports': 'off',
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: governancePlugin.configs.recommended.restrictedImportPaths.filter(
+            (p) => p.name !== '@redhat-cloud-services/frontend-components/useChrome',
+          ),
+        },
+      ],
+    },
+  },
+  {
+    files: ['src/Components/AppLink.tsx', 'src/hooks/useAppNavigate.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: governancePlugin.configs.recommended.restrictedImportPaths.filter(
+            (p) =>
+              p.name !== '@redhat-cloud-services/frontend-components/useChrome' &&
+              p.name !== 'react-router-dom',
+          ),
+        },
+      ],
     },
   },
 );
