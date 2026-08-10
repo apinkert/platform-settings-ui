@@ -21,6 +21,6 @@ See `eslint.config.js` for config details and
 
 | Config | Applies to | What it adds |
 |--------|-----------|-------------|
-| `recommended` | `src/**` | Core rules + restricted imports (useChrome, PF globals, react-router-dom) |
+| `recommended` | `src/**` | Core rules + restricted imports (useChrome, PF globals, react-router-dom, feature flag hooks) |
 | `stories` | `*.stories.tsx` | Story-specific rules + MSW handler restrictions |
 | `data-layer` | `data/queries/**` | DI contract enforcement for data layer hooks |
