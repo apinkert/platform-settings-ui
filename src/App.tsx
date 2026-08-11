@@ -20,6 +20,8 @@ const AppWithServices = () => {
   useEffect(() => {
     chrome.auth.getUser().then((user) => {
       setIsOrgAdmin(user?.identity?.user?.is_org_admin ?? false);
+    }).catch(() => {
+      setIsOrgAdmin(false);
     });
   }, []);
 
