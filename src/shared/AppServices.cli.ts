@@ -8,6 +8,7 @@ export function createCliServices(): AppServices {
       console.log(`[cli] notification: ${n.variant} - ${n.title}`),
     getToken: async () => 'cli-stub-token',
     environment: 'stage',
+    isOrgAdmin: true,
     axios: Axios.create(),
     notify: (variant, title, description) =>
       console.log(`[cli] ${variant}: ${title} ${description ?? ''}`),

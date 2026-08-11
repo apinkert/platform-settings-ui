@@ -17,6 +17,7 @@ export function createBrowserServices(
     isProd: () => boolean;
   },
   addNotification: (notification: Notification) => void,
+  isOrgAdmin: boolean,
 ): AppServices {
   const environment: Environment = chrome.isProd() ? 'production' : 'stage';
 
@@ -38,6 +39,7 @@ export function createBrowserServices(
     addNotification,
     getToken: async () => (await chrome.auth.getToken()) ?? '',
     environment,
+    isOrgAdmin,
     axios: axiosInstance,
     notify,
     fetchCVEs: async (params = {}) => {
