@@ -1,9 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
 import { expect, within } from 'storybook/test';
-import { HttpResponse, http } from 'msw';
 import EventLogPage from './EventLogPage';
 import { createBundlesHandlers } from '../../data/mocks/bundles';
-import { createEventsHandlers, eventsDb } from '../../data/mocks/events';
+import {
+  createEmptyEventsHandler,
+  createErrorEventsHandler,
+  createEventsHandlers,
+  eventsDb,
+} from '../../data/mocks/events';
 import { seedEvents } from '../../data/mocks/seed';
 
 const meta: Meta<typeof EventLogPage> = {
@@ -64,16 +68,7 @@ export const NonAdmin: Story = {
 export const Empty: Story = {
   parameters: {
     msw: {
-      handlers: [
-        ...createBundlesHandlers(),
-        http.get('/api/notifications/v2/notifications/events', () =>
-          HttpResponse.json({
-            data: [],
-            links: {},
-            meta: { count: 0 },
-          }),
-        ),
-      ],
+      handlers: [...createBundlesHandlers(), createEmptyEventsHandler()],
     },
   },
   play: async ({ canvasElement, step }) => {
@@ -89,15 +84,7 @@ export const Empty: Story = {
 export const Error: Story = {
   parameters: {
     msw: {
-      handlers: [
-        ...createBundlesHandlers(),
-        http.get('/api/notifications/v2/notifications/events', () =>
-          HttpResponse.json(
-            { message: 'Internal Server Error' },
-            { status: 500 },
-          ),
-        ),
-      ],
+      handlers: [...createBundlesHandlers(), createErrorEventsHandler()],
     },
   },
   play: async ({ canvasElement, step }) => {

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { IntlProvider } from 'react-intl';
-import { Bullseye, Spinner } from '@patternfly/react-core';
+import { Bullseye } from '@patternfly/react-core/dist/dynamic/layouts/Bullseye';
+import { Spinner } from '@patternfly/react-core/dist/dynamic/components/Spinner';
 import NotificationsProvider from '@redhat-cloud-services/frontend-components-notifications/NotificationsProvider';
 import { useAddNotification } from '@redhat-cloud-services/frontend-components-notifications/hooks';
 import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
@@ -18,11 +19,14 @@ const AppWithServices = () => {
   const [isOrgAdmin, setIsOrgAdmin] = useState<boolean | undefined>(undefined);
 
   useEffect(() => {
-    chrome.auth.getUser().then((user) => {
-      setIsOrgAdmin(user?.identity?.user?.is_org_admin ?? false);
-    }).catch(() => {
-      setIsOrgAdmin(false);
-    });
+    chrome.auth
+      .getUser()
+      .then((user) => {
+        setIsOrgAdmin(user?.identity?.user?.is_org_admin ?? false);
+      })
+      .catch(() => {
+        setIsOrgAdmin(false);
+      });
   }, []);
 
   const services = useMemo(
