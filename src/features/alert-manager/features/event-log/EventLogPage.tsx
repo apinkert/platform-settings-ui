@@ -1,13 +1,13 @@
 import React, { useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { MenuToggle } from '@patternfly/react-core/dist/dynamic/components/MenuToggle';
+import { PageSection } from '@patternfly/react-core/dist/dynamic/components/Page';
 import {
-  MenuToggle,
-  PageSection,
   Select,
   SelectList,
   SelectOption,
-} from '@patternfly/react-core';
-import { PageHeader } from '@patternfly/react-component-groups';
+} from '@patternfly/react-core/dist/dynamic/components/Select';
+import PageHeader from '@patternfly/react-component-groups/dist/dynamic/PageHeader';
 import { NotAuthorized } from '@redhat-cloud-services/frontend-components/NotAuthorized';
 import { useAppServices } from '../../../../shared/ServiceContext';
 import EventLogTable from './components/EventLogTable';

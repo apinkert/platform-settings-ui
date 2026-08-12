@@ -3,10 +3,7 @@ const { defineConfig } = require('eslint/config');
 const fecPlugin = require('@redhat-cloud-services/eslint-config-redhat-cloud-services');
 const tsParser = require('@typescript-eslint/parser');
 const tseslint = require('typescript-eslint');
-
-const requireUseTableState = require('./eslint-rules/require-use-table-state');
-const enforceStoryPatterns = require('./eslint-rules/enforce-story-patterns');
-const noDirectUserType = require('./eslint-rules/no-direct-user-type');
+const governancePlugin = require('experience-ui-governance/eslint-plugin');
 
 module.exports = defineConfig(
   fecPlugin,
@@ -34,40 +31,79 @@ module.exports = defineConfig(
       parser: tsParser,
     },
     plugins: {
-      'platform-settings-local': {
-        rules: {
-          'require-use-table-state': requireUseTableState,
-          'enforce-story-patterns': enforceStoryPatterns,
-          'no-direct-user-type': noDirectUserType,
-        },
-      },
+      'experience-ui': governancePlugin,
     },
     rules: {
       'react/prop-types': 'off',
       'react/react-in-jsx-scope': 'off',
       'react/jsx-uses-react': 'off',
       '@typescript-eslint/no-unused-vars': 'error',
-      'platform-settings-local/require-use-table-state': 'error',
-      'no-restricted-imports': [
-        'error',
-        {
-          paths: [
-            {
-              name: 'react-router-dom',
-              importNames: ['Link', 'useNavigate'],
-              message:
-                'Use AppLink from src/Components/AppLink for links. Use useAppNavigate from src/hooks/useAppNavigate for programmatic navigation.',
-            },
-          ],
-        },
-      ],
+      'experience-ui/no-boundary-violations': 'error',
+      'experience-ui/no-jest-snapshot': 'error',
+      ...governancePlugin.configs.recommended.rules,
     },
   },
   {
     files: ['src/**/*.stories.@(ts|tsx)'],
     rules: {
-      'platform-settings-local/enforce-story-patterns': 'error',
-      'platform-settings-local/no-direct-user-type': 'error',
+      ...governancePlugin.configs.stories.rules,
+    },
+  },
+  {
+    files: ['src/**/data/queries/**/*.ts', 'src/**/data/queries/**/*.tsx'],
+    rules: {
+      ...governancePlugin.configs['data-layer'].rules,
+    },
+  },
+  {
+    files: ['src/App.tsx'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: governancePlugin.configs.recommended.restrictedImportPaths.filter(
+            (p) => p.name !== '@redhat-cloud-services/frontend-components/useChrome',
+          ),
+        },
+      ],
+    },
+  },
+  {
+    files: ['src/Components/AppLink.tsx'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: governancePlugin.configs.recommended.restrictedImportPaths
+            .filter(
+              (p) => p.name !== '@redhat-cloud-services/frontend-components/useChrome',
+            )
+            .map((p) =>
+              p.name === 'react-router-dom'
+                ? { ...p, importNames: ['useNavigate'] }
+                : p,
+            ),
+        },
+      ],
+    },
+  },
+  {
+    files: ['src/hooks/useAppNavigate.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: governancePlugin.configs.recommended.restrictedImportPaths
+            .filter(
+              (p) => p.name !== '@redhat-cloud-services/frontend-components/useChrome',
+            )
+            .map((p) =>
+              p.name === 'react-router-dom'
+                ? { ...p, importNames: ['Link'] }
+                : p,
+            ),
+        },
+      ],
     },
   },
 );

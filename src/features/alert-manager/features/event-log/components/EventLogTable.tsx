@@ -5,24 +5,24 @@ import {
   Dropdown,
   DropdownItem,
   DropdownList,
+} from '@patternfly/react-core/dist/dynamic/components/Dropdown';
+import {
   Label,
   LabelGroup,
-  MenuToggle,
-  Popover,
-  Tooltip,
-} from '@patternfly/react-core';
-import {
-  EllipsisVIcon,
-  EnvelopeIcon,
-  LinkIcon,
-  OpenDrawerRightIcon,
-  SeverityCriticalIcon,
-  SeverityImportantIcon,
-  SeverityMinorIcon,
-  SeverityModerateIcon,
-  SeverityNoneIcon,
-  SeverityUndefinedIcon,
-} from '@patternfly/react-icons';
+} from '@patternfly/react-core/dist/dynamic/components/Label';
+import { MenuToggle } from '@patternfly/react-core/dist/dynamic/components/MenuToggle';
+import { Popover } from '@patternfly/react-core/dist/dynamic/components/Popover';
+import { Tooltip } from '@patternfly/react-core/dist/dynamic/components/Tooltip';
+import EllipsisVIcon from '@patternfly/react-icons/dist/js/icons/ellipsis-v-icon';
+import EnvelopeIcon from '@patternfly/react-icons/dist/js/icons/envelope-icon';
+import LinkIcon from '@patternfly/react-icons/dist/js/icons/link-icon';
+import OpenDrawerRightIcon from '@patternfly/react-icons/dist/js/icons/open-drawer-right-icon';
+import SeverityCriticalIcon from '@patternfly/react-icons/dist/js/icons/severity-critical-icon';
+import SeverityImportantIcon from '@patternfly/react-icons/dist/js/icons/severity-important-icon';
+import SeverityMinorIcon from '@patternfly/react-icons/dist/js/icons/severity-minor-icon';
+import SeverityModerateIcon from '@patternfly/react-icons/dist/js/icons/severity-moderate-icon';
+import SeverityNoneIcon from '@patternfly/react-icons/dist/js/icons/severity-none-icon';
+import SeverityUndefinedIcon from '@patternfly/react-icons/dist/js/icons/severity-undefined-icon';
 import {
   TableView,
   useTableState,

@@ -1,7 +1,31 @@
-# This is a comment.
-# Each line is a file pattern followed by one or more owners.
+# Default — team reviews all feature code
+*                               @RedHatInsights/experience-ui-committers
 
-# These owners will be the default owners for everything in
-# the repo. Unless a later match takes precedence.
-*       @RedHatInsights/experience-ui-committers
-*       @RedHatInsights/experience-services-committers
+# Structural / architectural gatekeeping — broad blast radius
+/.github/                       @aferd @apinkert
+/.storybook/                    @aferd @apinkert
+/.tekton/                       @aferd @apinkert
+/.coderabbit.yml                @aferd @apinkert
+/.gitignore                     @aferd @apinkert
+/config/                        @aferd @apinkert
+/package.json                   @aferd @apinkert
+/package-lock.json              @aferd @apinkert
+/tsconfig.json                  @aferd @apinkert
+/fec.config.js                  @aferd @apinkert
+
+# E2E
+/playwright/                    @aferd @apinkert
+
+# ESLint rules — architectural boundary enforcement
+/eslint-rules/                  @aferd @apinkert
+/eslint.config.js               @aferd @apinkert
+
+# App shell and routes
+/src/App.tsx                    @aferd @apinkert
+/src/Routing.tsx                @aferd @apinkert
+
+# Data layer — API contracts, queries, mocks
+/src/shared/                    @aferd @apinkert
+
+# Deployment
+/deploy/                        @aferd @apinkert
