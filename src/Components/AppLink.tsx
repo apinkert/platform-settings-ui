@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-restricted-imports -- AppLink is the wrapper for Link
 import { Link, type LinkProps } from 'react-router-dom';
 import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
 import { mergeToBasename } from '../utils/mergeToBasename';

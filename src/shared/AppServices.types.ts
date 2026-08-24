@@ -31,6 +31,7 @@ export interface AppServices {
   addNotification: (notification: Notification) => void;
   getToken: () => Promise<string>;
   environment: Environment;
+  isOrgAdmin: boolean;
   fetchCVEs: (params?: { per_page?: number }) => Promise<CVE[]>;
   axios: AxiosInstance;
   notify: NotifyFn;

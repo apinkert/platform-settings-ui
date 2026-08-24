@@ -31,12 +31,12 @@ objects:
             module: './RootApp'
             routes:
               - pathname: /settings
+                exact: false
 
       bundleSegments:
         - segmentId: platform-settings
           bundleId: settings
           position: 200
-          title: Platform Settings
           navItems:
             - id: overview
               title: Overview
@@ -62,8 +62,8 @@ objects:
                   args:
                     - platform.settings.redesign
                     - true
-            - id: data-integration
-              title: Data Integration
+            - id: data-integrations
+              title: Data Integrations
               href: /settings/data-integrations
               permissions:
                 - method: featureFlag
@@ -99,7 +99,7 @@ objects:
                 - platform.settings.redesign
                 - true
         - id: platform-settings-integrations
-          title: Data Integration
+          title: Data Integrations
           href: /settings/data-integrations
           description: Manage data sources and integrations for the Hybrid Cloud Console.
           alt_title:

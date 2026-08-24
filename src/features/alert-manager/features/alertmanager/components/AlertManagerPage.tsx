@@ -1,16 +1,15 @@
 import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';
-import {
-  Content,
-  ContentVariants,
-  Divider,
-  Flex,
-  FlexItem,
-  Title,
-} from '@patternfly/react-core';
-import { OpenDrawerRightIcon } from '@patternfly/react-icons';
+import { Content } from '@patternfly/react-core/dist/dynamic/components/Content';
+import { ContentVariants } from '@patternfly/react-core/dist/esm/components/Content/Content';
+import { Divider } from '@patternfly/react-core/dist/dynamic/components/Divider';
+import { Flex } from '@patternfly/react-core/dist/dynamic/layouts/Flex';
+import { FlexItem } from '@patternfly/react-core/dist/dynamic/layouts/Flex';
+import { Title } from '@patternfly/react-core/dist/dynamic/components/Title';
+import OpenDrawerRightIcon from '@patternfly/react-icons/dist/js/icons/open-drawer-right-icon';
 import PageHeader from '@redhat-cloud-services/frontend-components/PageHeader';
 import Main from '@redhat-cloud-services/frontend-components/Main';
+// eslint-disable-next-line no-restricted-imports -- Page component needs chrome for document title
 import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
 import AlertManagerTable from './AlertManagerTable';
 import messages from '../messages';

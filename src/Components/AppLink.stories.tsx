@@ -17,6 +17,8 @@ import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 import React from 'react';
 import { AppLink } from './AppLink';
 
+const BASENAME = '/settings/platform-settings';
+
 const LocationDisplay: React.FC = () => {
   const location = useLocation();
   return <div data-testid="current-location">{location.pathname}</div>;
@@ -26,10 +28,10 @@ const meta: Meta<typeof AppLink> = {
   component: AppLink,
   decorators: [
     (Story) => (
-      <MemoryRouter initialEntries={['/settings/roles']}>
+      <MemoryRouter initialEntries={[`${BASENAME}/roles`]}>
         <Routes>
           <Route
-            path="/settings/*"
+            path={`${BASENAME}/*`}
             element={
               <>
                 <Story />
@@ -65,14 +67,14 @@ export const Default: Story = {
       const link = canvas.getByRole('link', { name: 'Create role' });
       await user.click(link);
       const location = canvas.getByTestId('current-location');
-      expect(location.textContent).toBe('/settings/roles/create');
+      expect(location.textContent).toBe(`${BASENAME}/roles/create`);
     });
   },
 };
 
 export const IdempotentBasename: Story = {
   args: {
-    to: '/settings/roles',
+    to: `${BASENAME}/roles`,
     children: 'Already prefixed link',
   },
   play: async ({ canvasElement, step }) => {
@@ -87,7 +89,7 @@ export const IdempotentBasename: Story = {
         });
         await user.click(link);
         const location = canvas.getByTestId('current-location');
-        expect(location.textContent).toBe('/settings/roles');
+        expect(location.textContent).toBe(`${BASENAME}/roles`);
       },
     );
   },

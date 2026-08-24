@@ -41,6 +41,7 @@ interface ServiceTile {
 
 interface ModuleRoute {
   pathname: string;
+  exact?: boolean;
 }
 
 interface FrontendSpec {
@@ -113,9 +114,15 @@ for (const [i, mod] of spec.module.modules.entries()) {
   }
 }
 
-const registeredRoutes = new Set(
-  spec.module.modules.flatMap((m) => m.routes.map((r) => r.pathname))
-);
+const allRoutes = spec.module.modules.flatMap((m) => m.routes);
+
+function matchesRoute(href: string): boolean {
+  return allRoutes.some((r) =>
+    r.exact === false
+      ? href === r.pathname || href.startsWith(`${r.pathname}/`)
+      : href === r.pathname
+  );
+}
 
 const allIds = new Set<string>();
 
@@ -140,7 +147,7 @@ for (const segment of spec.bundleSegments) {
         if (!isValidHref(item.href)) {
           error(`${label}: href "${item.href}" is not "${HREF_PREFIX}" or under "${HREF_PREFIX}/"`);
         }
-        if (!registeredRoutes.has(item.href)) {
+        if (!matchesRoute(item.href)) {
           error(`${label}: href "${item.href}" has no matching module route`);
         }
       }
@@ -168,7 +175,7 @@ for (const entry of spec.searchEntries ?? []) {
   if (entry.href && !isValidHref(entry.href)) {
     error(`${label}: href "${entry.href}" is not "${HREF_PREFIX}" or under "${HREF_PREFIX}/"`);
   }
-  if (entry.href && !registeredRoutes.has(entry.href)) {
+  if (entry.href && !matchesRoute(entry.href)) {
     error(`${label}: href "${entry.href}" has no matching module route`);
   }
 
@@ -189,7 +196,7 @@ for (const tile of spec.serviceTiles ?? []) {
   if (tile.href && !isValidHref(tile.href)) {
     error(`${label}: href "${tile.href}" is not "${HREF_PREFIX}" or under "${HREF_PREFIX}/"`);
   }
-  if (tile.href && !registeredRoutes.has(tile.href)) {
+  if (tile.href && !matchesRoute(tile.href)) {
     error(`${label}: href "${tile.href}" has no matching module route`);
   }
 

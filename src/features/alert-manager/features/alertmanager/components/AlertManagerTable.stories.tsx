@@ -1,59 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { MemoryRouter } from 'react-router-dom';
-import { HttpResponse, delay, http } from 'msw';
 import { clearAndType } from '../../../../../shared/interactionHelpers';
+import { eventTypesHandlers } from '../data/mocks/eventTypes';
 import AlertManagerTable from './AlertManagerTable';
-
-const mockEventTypesData = {
-  data: [
-    {
-      id: '1',
-      name: 'policy.triggered',
-      display_name: 'Policy triggered',
-      application_id: 'app-1',
-      application: {
-        id: 'app-1',
-        name: 'policies',
-        display_name: 'Policies',
-        bundle_id: 'bundle-1',
-      },
-      visible: true,
-      subscribed_by_default: false,
-    },
-    {
-      id: '2',
-      name: 'compliance.failed',
-      display_name: 'Compliance check failed',
-      application_id: 'app-2',
-      application: {
-        id: 'app-2',
-        name: 'compliance',
-        display_name: 'Compliance',
-        bundle_id: 'bundle-1',
-      },
-      visible: true,
-      subscribed_by_default: false,
-    },
-    {
-      id: '3',
-      name: 'advisor.recommendation',
-      display_name: 'New recommendation available',
-      application_id: 'app-3',
-      application: {
-        id: 'app-3',
-        name: 'advisor',
-        display_name: 'Insights Advisor',
-        bundle_id: 'bundle-1',
-      },
-      visible: true,
-      subscribed_by_default: false,
-    },
-  ],
-  meta: {
-    count: 3,
-  },
-};
 
 const meta = {
   title: 'Features/AlertManager/AlertManagerTable',
@@ -76,11 +26,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   parameters: {
     msw: {
-      handlers: [
-        http.get('/api/notifications/v1.0/notifications/eventTypes', () => {
-          return HttpResponse.json(mockEventTypesData);
-        }),
-      ],
+      handlers: [eventTypesHandlers.success()],
     },
   },
   play: async ({ canvasElement, step }) => {
@@ -94,16 +40,16 @@ export const Default: Story = {
       );
       expect(policyTriggered).toBeInTheDocument();
 
-      expect(canvas.getByText('Compliance check failed')).toBeInTheDocument();
       expect(
-        canvas.getByText('New recommendation available'),
+        canvas.getByText('Compliance below threshold'),
       ).toBeInTheDocument();
+      expect(canvas.getByText('New recommendation')).toBeInTheDocument();
     });
 
     await step('Service column displays correctly', async () => {
       expect(canvas.getByText('Policies')).toBeInTheDocument();
       expect(canvas.getByText('Compliance')).toBeInTheDocument();
-      expect(canvas.getByText('Insights Advisor')).toBeInTheDocument();
+      expect(canvas.getByText('Advisor')).toBeInTheDocument();
     });
 
     await step('Event type cells are links', async () => {
@@ -126,14 +72,7 @@ export const Default: Story = {
 export const Loading: Story = {
   parameters: {
     msw: {
-      handlers: [
-        http.get(
-          '/api/notifications/v1.0/notifications/eventTypes',
-          async () => {
-            await delay('infinite');
-          },
-        ),
-      ],
+      handlers: [eventTypesHandlers.loading()],
     },
   },
   play: async ({ canvasElement, step }) => {
@@ -154,14 +93,7 @@ export const Loading: Story = {
 export const EmptyState: Story = {
   parameters: {
     msw: {
-      handlers: [
-        http.get('/api/notifications/v1.0/notifications/eventTypes', () => {
-          return HttpResponse.json({
-            data: [],
-            meta: { count: 0 },
-          });
-        }),
-      ],
+      handlers: [eventTypesHandlers.empty()],
     },
   },
   play: async ({ canvasElement, step }) => {
@@ -184,14 +116,7 @@ export const EmptyState: Story = {
 export const ErrorState: Story = {
   parameters: {
     msw: {
-      handlers: [
-        http.get('/api/notifications/v1.0/notifications/eventTypes', () => {
-          return HttpResponse.json(
-            { error: 'Internal server error' },
-            { status: 500 },
-          );
-        }),
-      ],
+      handlers: [eventTypesHandlers.error()],
     },
   },
   play: async ({ canvasElement, step }) => {
@@ -221,29 +146,7 @@ export const ErrorState: Story = {
 export const WithPagination: Story = {
   parameters: {
     msw: {
-      handlers: [
-        http.get('/api/notifications/v1.0/notifications/eventTypes', () => {
-          const data = Array.from({ length: 50 }, (_, i) => ({
-            id: `${i + 1}`,
-            name: `event.type.${i + 1}`,
-            display_name: `Event Type ${i + 1}`,
-            application_id: `app-${i % 5}`,
-            application: {
-              id: `app-${i % 5}`,
-              name: `app${i % 5}`,
-              display_name: `Application ${i % 5}`,
-              bundle_id: 'bundle-1',
-            },
-            visible: true,
-            subscribed_by_default: false,
-          }));
-
-          return HttpResponse.json({
-            data: data.slice(0, 20), // First page
-            meta: { count: 50 },
-          });
-        }),
-      ],
+      handlers: [eventTypesHandlers.paginated(50)],
     },
   },
   play: async ({ canvasElement, step }) => {
@@ -272,25 +175,7 @@ export const WithPagination: Story = {
 export const NoResults: Story = {
   parameters: {
     msw: {
-      handlers: [
-        http.get(
-          '/api/notifications/v1.0/notifications/eventTypes',
-          ({ request }) => {
-            const url = new URL(request.url);
-            const eventTypeName = url.searchParams.get('eventTypeName');
-
-            // If filtered, return no results
-            if (eventTypeName) {
-              return HttpResponse.json({
-                data: [],
-                meta: { count: 0 },
-              });
-            }
-
-            return HttpResponse.json(mockEventTypesData);
-          },
-        ),
-      ],
+      handlers: [eventTypesHandlers.noResultsAfterFilter()],
     },
   },
   play: async ({ canvasElement, step }) => {
@@ -322,30 +207,7 @@ export const NoResults: Story = {
 export const EventTypeFilter: Story = {
   parameters: {
     msw: {
-      handlers: [
-        http.get(
-          '/api/notifications/v1.0/notifications/eventTypes',
-          ({ request }) => {
-            const url = new URL(request.url);
-            const eventTypeName = url.searchParams.get('eventTypeName');
-
-            // If event type filter is applied, return filtered results
-            if (eventTypeName) {
-              const filteredData = mockEventTypesData.data.filter((item) =>
-                item.display_name
-                  .toLowerCase()
-                  .includes(eventTypeName.toLowerCase()),
-              );
-              return HttpResponse.json({
-                data: filteredData,
-                meta: { count: filteredData.length },
-              });
-            }
-
-            return HttpResponse.json(mockEventTypesData);
-          },
-        ),
-      ],
+      handlers: [eventTypesHandlers.filtered()],
     },
   },
   play: async ({ canvasElement, step }) => {
@@ -363,10 +225,10 @@ export const EventTypeFilter: Story = {
 
     await step('All event types displayed initially', async () => {
       expect(canvas.getByText('Policy triggered')).toBeInTheDocument();
-      expect(canvas.getByText('Compliance check failed')).toBeInTheDocument();
       expect(
-        canvas.getByText('New recommendation available'),
+        canvas.getByText('Compliance below threshold'),
       ).toBeInTheDocument();
+      expect(canvas.getByText('New recommendation')).toBeInTheDocument();
     });
 
     await step('Filter by event type name', async () => {
@@ -381,10 +243,10 @@ export const EventTypeFilter: Story = {
           // Should only show Policy triggered
           expect(canvas.queryByText('Policy triggered')).toBeInTheDocument();
           expect(
-            canvas.queryByText('Compliance check failed'),
+            canvas.queryByText('Compliance below threshold'),
           ).not.toBeInTheDocument();
           expect(
-            canvas.queryByText('New recommendation available'),
+            canvas.queryByText('New recommendation'),
           ).not.toBeInTheDocument();
         },
         { timeout: 5000 },
@@ -399,11 +261,7 @@ export const EventTypeFilter: Story = {
 export const SortableColumns: Story = {
   parameters: {
     msw: {
-      handlers: [
-        http.get('/api/notifications/v1.0/notifications/eventTypes', () => {
-          return HttpResponse.json(mockEventTypesData);
-        }),
-      ],
+      handlers: [eventTypesHandlers.success()],
     },
   },
   play: async ({ canvasElement, step }) => {

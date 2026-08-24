@@ -18,6 +18,7 @@ const baseMockServices: Omit<AppServices, 'addNotification' | 'notify'> = {
   appAction: () => {},
   getToken: async () => 'mock-token',
   environment: 'stage',
+  isOrgAdmin: true,
   fetchCVEs: async () => [],
   axios: Axios.create(),
 };
@@ -42,6 +43,18 @@ const ServiceProviderWithNotifications: React.FC<{
 
 const preview: Preview = {
   ...hccPreviewDefaults,
+  parameters: {
+    ...hccPreviewDefaults.parameters,
+    a11y: {
+      config: {
+        rules: [
+          { id: 'landmark-one-main', enabled: false },
+          { id: 'page-has-heading-one', enabled: false },
+          { id: 'region', enabled: false },
+        ],
+      },
+    },
+  },
   decorators: [
     (Story, { parameters }) => {
       const queryClient = new QueryClient({
@@ -50,14 +63,14 @@ const preview: Preview = {
         },
       });
       return (
-        <IntlProvider locale="en">
-          <StorybookMockProvider
-            bundle="settings"
-            app="platform-settings"
-            environment={
-              parameters.environment === 'production' ? 'production' : 'stage'
-            }
-          >
+        <StorybookMockProvider
+          bundle="settings"
+          app="platform-settings"
+          environment={
+            parameters.environment === 'production' ? 'production' : 'stage'
+          }
+        >
+          <IntlProvider locale="en" defaultLocale="en">
             <NotificationsProvider>
               <ServiceProviderWithNotifications overrides={parameters.services}>
                 <QueryClientProvider client={queryClient}>
@@ -65,8 +78,8 @@ const preview: Preview = {
                 </QueryClientProvider>
               </ServiceProviderWithNotifications>
             </NotificationsProvider>
-          </StorybookMockProvider>
-        </IntlProvider>
+          </IntlProvider>
+        </StorybookMockProvider>
       );
     },
   ],

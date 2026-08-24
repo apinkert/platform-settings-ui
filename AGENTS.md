@@ -3,6 +3,12 @@
 This document helps AI coding agents (Claude Code, Copilot, Cursor, etc.)
 work effectively with this codebase.
 
+## Governance
+
+This repo follows [Experience UI Governance](https://github.com/RedHatInsights/experience-ui-governance).
+Read `node_modules/experience-ui-governance/standards/index.md` for the full
+engineering standards. The governance package is the canonical source of truth.
+
 ## Architecture
 
 HCC micro-frontend running inside the Chrome shell via Module Federation.
@@ -36,9 +42,10 @@ See `src/shared/WHY-TanStackQuery.md`.
 - **E2E tests:** Playwright (`playwright/`)
 - No Cypress — removed in favor of Storybook
 
-## Custom ESLint Rules
+## ESLint Rules
 
-Three local rules under `platform-settings-local/*` — see `eslint-rules/README.md`.
+Five rules from `experience-ui-governance/eslint-plugin` under the `experience-ui/*`
+namespace — see `eslint-rules/README.md`.
 
 ## File Naming
 
@@ -53,5 +60,9 @@ Three local rules under `platform-settings-local/*` — see `eslint-rules/README
 - Import `useChrome()` in feature components — use `useAppServices()`
 - Write `useEffect` + `useState` for data fetching — use TanStack Query
 - Import `Link` or `useNavigate` from react-router-dom — use AppLink/useAppNavigate
+- Use global PatternFly imports — use dynamic sub-paths (`/dist/dynamic/`)
 - Use `canvasElement.querySelector()` in stories — use `within()` queries
 - Use `getBy*` inside `waitFor()` — use `queryBy*` + `expect` or `findBy*`
+- Use `useFlag`/`useFlags` directly — create semantic hooks in `src/capabilities/`
+- Import across feature boundaries — features must not import from each other
+- Use `toMatchSnapshot()` or `toMatchInlineSnapshot()` — write explicit assertions

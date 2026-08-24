@@ -1,3 +1,4 @@
+import { HttpResponse, http, delay as mswDelay } from 'msw';
 import { EventType, EventTypesResponse } from '../../types';
 
 export const mockEventTypes: EventType[] = [
@@ -167,4 +168,93 @@ export const createMockEventTypesResponse = (
       count: allEvents.length,
     },
   };
+};
+
+// MSW Handler Factories
+const API_BASE = '/api/notifications/v1.0';
+
+export const eventTypesHandlers = {
+  success: (mockData?: EventTypesResponse) =>
+    http.get(`${API_BASE}/notifications/eventTypes`, () => {
+      return HttpResponse.json(
+        mockData || createMockEventTypesResponse(20, 0, 3),
+      );
+    }),
+
+  loading: () =>
+    http.get(`${API_BASE}/notifications/eventTypes`, async () => {
+      await mswDelay('infinite');
+    }),
+
+  error: () =>
+    http.get(`${API_BASE}/notifications/eventTypes`, () => {
+      return HttpResponse.json(
+        { error: 'Internal server error' },
+        { status: 500 },
+      );
+    }),
+
+  empty: () =>
+    http.get(`${API_BASE}/notifications/eventTypes`, () => {
+      return HttpResponse.json({ data: [], meta: { count: 0 } });
+    }),
+
+  paginated: (totalItems = 50) =>
+    http.get(`${API_BASE}/notifications/eventTypes`, () => {
+      const data = Array.from({ length: totalItems }, (_, i) => ({
+        id: `${i + 1}`,
+        name: `event.type.${i + 1}`,
+        display_name: `Event Type ${i + 1}`,
+        application_id: `app-${i % 5}`,
+        application: {
+          id: `app-${i % 5}`,
+          name: `app${i % 5}`,
+          display_name: `Application ${i % 5}`,
+          bundle_id: 'bundle-1',
+        },
+        visible: true,
+        subscribed_by_default: false,
+      }));
+
+      return HttpResponse.json({
+        data: data.slice(0, 20),
+        meta: { count: totalItems },
+      });
+    }),
+
+  filtered: () =>
+    http.get(`${API_BASE}/notifications/eventTypes`, ({ request }) => {
+      const url = new URL(request.url);
+      const eventTypeName = url.searchParams.get('eventTypeName');
+
+      const mockData = createMockEventTypesResponse(20, 0, 3);
+
+      if (eventTypeName) {
+        const filteredData = mockData.data.filter((item) =>
+          item.display_name.toLowerCase().includes(eventTypeName.toLowerCase()),
+        );
+        return HttpResponse.json({
+          data: filteredData,
+          meta: { count: filteredData.length },
+        });
+      }
+
+      return HttpResponse.json(mockData);
+    }),
+
+  noResultsAfterFilter: () =>
+    http.get(`${API_BASE}/notifications/eventTypes`, ({ request }) => {
+      const url = new URL(request.url);
+      const eventTypeName = url.searchParams.get('eventTypeName');
+
+      // If filtered, return no results
+      if (eventTypeName) {
+        return HttpResponse.json({
+          data: [],
+          meta: { count: 0 },
+        });
+      }
+
+      return HttpResponse.json(createMockEventTypesResponse(20, 0, 3));
+    }),
 };

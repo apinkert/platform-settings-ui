@@ -1,14 +1,14 @@
 import { useEffect } from 'react';
 
 import { NotAuthorized } from '@redhat-cloud-services/frontend-components/NotAuthorized';
-import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
+import { useAppServices } from '../shared/ServiceContext';
 
 const NoPermissionsPage = () => {
-  const { appAction } = useChrome();
+  const { appAction } = useAppServices();
 
   useEffect(() => {
     appAction('no-permissions');
-  }, []);
+  }, [appAction]);
 
   return (
     <main>
