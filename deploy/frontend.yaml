@@ -31,11 +31,6 @@ objects:
             module: './RootApp'
             routes:
               - pathname: /settings
-              - pathname: /settings/overview
-              - pathname: /settings/alertmanager
-              - pathname: /settings/eventlog
-              - pathname: /settings/alertmanager/capacity-management
-              - pathname: /settings/data-integrations
 
       bundleSegments:
         - segmentId: platform-settings

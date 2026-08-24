@@ -58,6 +58,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest-environment-jsdom": "^29.7.0",
     "npm-run-all2": "^5.0.2",
+    "react-intl": "^6.8.9",
     "remark-gfm": "^4.0.0",
     "rimraf": "^5.0.10",
     "start-server-and-test": "^3.0.11",

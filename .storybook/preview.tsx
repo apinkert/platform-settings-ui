@@ -2,6 +2,7 @@ import type { Preview } from '@storybook/react-webpack5';
 import '@patternfly/react-core/dist/styles/base.css';
 import '@patternfly/patternfly/patternfly-addons.css';
 import React, { useMemo } from 'react';
+import { IntlProvider } from 'react-intl';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import NotificationsProvider from '@redhat-cloud-services/frontend-components-notifications/NotificationsProvider';
 import { useAddNotification } from '@redhat-cloud-services/frontend-components-notifications/hooks';
@@ -49,21 +50,23 @@ const preview: Preview = {
         },
       });
       return (
-        <StorybookMockProvider
-          bundle="settings"
-          app="platform-settings"
-          environment={
-            parameters.environment === 'production' ? 'production' : 'stage'
-          }
-        >
-          <NotificationsProvider>
-            <ServiceProviderWithNotifications overrides={parameters.services}>
-              <QueryClientProvider client={queryClient}>
-                <Story />
-              </QueryClientProvider>
-            </ServiceProviderWithNotifications>
-          </NotificationsProvider>
-        </StorybookMockProvider>
+        <IntlProvider locale="en">
+          <StorybookMockProvider
+            bundle="settings"
+            app="platform-settings"
+            environment={
+              parameters.environment === 'production' ? 'production' : 'stage'
+            }
+          >
+            <NotificationsProvider>
+              <ServiceProviderWithNotifications overrides={parameters.services}>
+                <QueryClientProvider client={queryClient}>
+                  <Story />
+                </QueryClientProvider>
+              </ServiceProviderWithNotifications>
+            </NotificationsProvider>
+          </StorybookMockProvider>
+        </IntlProvider>
       );
     },
   ],
