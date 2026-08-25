@@ -12,7 +12,6 @@ import {
 } from '@redhat-cloud-services/frontend-components/TableView';
 import { EventType } from '../types';
 import { useEventTypes } from '../data/queries/useEventTypes';
-import { AppLink } from '../../../../../Components/AppLink';
 import messages from '../messages';
 import './AlertManagerTable.scss';
 
@@ -87,11 +86,7 @@ const AlertManagerTable: React.FC = () => {
 
   // Cell renderers
   const cellRenderers: CellRendererMap<typeof columns, EventType> = {
-    eventType: (row) => (
-      <AppLink to={`/settings/alert-manager/event/${row.id}`}>
-        {row.display_name}
-      </AppLink>
-    ),
+    eventType: (row) => row.display_name,
     service: (row) => row.application.display_name,
   };
 

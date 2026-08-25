@@ -159,7 +159,8 @@ export const createMockEventTypesResponse = (
   offset = 0,
   total?: number,
 ): EventTypesResponse => {
-  const allEvents = total ? mockEventTypes.slice(0, total) : mockEventTypes;
+  const allEvents =
+    total !== undefined ? mockEventTypes.slice(0, total) : mockEventTypes;
   const paginatedEvents = allEvents.slice(offset, offset + limit);
 
   return {
@@ -200,7 +201,11 @@ export const eventTypesHandlers = {
     }),
 
   paginated: (totalItems = 50) =>
-    http.get(`${API_BASE}/notifications/eventTypes`, () => {
+    http.get(`${API_BASE}/notifications/eventTypes`, ({ request }) => {
+      const url = new URL(request.url);
+      const limit = parseInt(url.searchParams.get('limit') || '20', 10);
+      const offset = parseInt(url.searchParams.get('offset') || '0', 10);
+
       const data = Array.from({ length: totalItems }, (_, i) => ({
         id: `${i + 1}`,
         name: `event.type.${i + 1}`,
@@ -217,7 +222,7 @@ export const eventTypesHandlers = {
       }));
 
       return HttpResponse.json({
-        data: data.slice(0, 20),
+        data: data.slice(offset, offset + limit),
         meta: { count: totalItems },
       });
     }),

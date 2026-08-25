@@ -3,11 +3,11 @@
 .alert-manager-header {
   // Icon sizing to match other settings pages
   .iconMinWidth-1-2-2 {
-    min-width: 60px;
+    min-width: var(--pf-v6-global--spacer--3xl);
 
     img {
-      width: 48px;
-      height: 48px;
+      width: var(--pf-v6-global--icon--FontSize--2xl);
+      height: var(--pf-v6-global--icon--FontSize--2xl);
     }
   }
 }
