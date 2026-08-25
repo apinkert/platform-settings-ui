@@ -53,8 +53,15 @@ export const Default: Story = {
     });
 
     await step('Event type cells display correctly', async () => {
-      const eventTypeCell = canvas.getByText('Policy triggered');
+      const eventTypeCell = canvas.getByRole('cell', {
+        name: /policy triggered/i,
+      });
       expect(eventTypeCell).toBeInTheDocument();
+
+      // Verify event types are not links
+      expect(
+        canvas.queryByRole('link', { name: /policy triggered/i }),
+      ).not.toBeInTheDocument();
     });
 
     await step('Filter toolbar is present', async () => {
@@ -198,12 +205,12 @@ export const NoResults: Story = {
       expect(filterInput).toHaveValue('test filter');
 
       // Verify no-results state is displayed
-      const noResultsMessage = await canvas.findByText(
-        /no matching event types/i,
-        {},
+      const noResultsHeading = await canvas.findByRole(
+        'heading',
+        { name: /no matching event types/i },
         { timeout: 5000 },
       );
-      expect(noResultsMessage).toBeInTheDocument();
+      expect(noResultsHeading).toBeInTheDocument();
     });
   },
 };
