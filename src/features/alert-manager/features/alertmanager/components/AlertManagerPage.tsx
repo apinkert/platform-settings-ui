@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';
-import { Content } from '@patternfly/react-core/dist/dynamic/components/Content';
-import { ContentVariants } from '@patternfly/react-core/dist/esm/components/Content/Content';
+import {
+  Content,
+  ContentVariants,
+} from '@patternfly/react-core/dist/dynamic/components/Content';
 import { Divider } from '@patternfly/react-core/dist/dynamic/components/Divider';
 import { Flex } from '@patternfly/react-core/dist/dynamic/layouts/Flex';
 import { FlexItem } from '@patternfly/react-core/dist/dynamic/layouts/Flex';
