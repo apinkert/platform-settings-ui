@@ -1,10 +1,15 @@
 import { Suspense, lazy, useMemo } from 'react';
 import type { ComponentType } from 'react';
 import { Route as RouterRoute, Routes as RouterRoutes } from 'react-router-dom';
-import { InvalidObject } from '@redhat-cloud-services/frontend-components/InvalidObject';
 import { Bullseye } from '@patternfly/react-core/dist/dynamic/layouts/Bullseye';
 import { Spinner } from '@patternfly/react-core/dist/dynamic/components/Spinner';
 
+const AlertManagerPage = lazy(
+  () =>
+    import(
+      /* webpackChunkName: "AlertManagerPage" */ './features/alert-manager/features/alertmanager/components/AlertManagerPage'
+    ),
+);
 const OopsPage = lazy(
   () => import(/* webpackChunkName: "OopsPage" */ './Components/OopsPage'),
 );
@@ -29,6 +34,14 @@ const LandingPage = () => (
 
 const routes = [
   {
+    path: 'alertmanager',
+    element: AlertManagerPage,
+  },
+  {
+    path: 'eventlog',
+    element: EventLogPage,
+  },
+  {
     path: 'no-permissions',
     element: NoPermissionsPage,
   },
@@ -37,16 +50,12 @@ const routes = [
     element: OopsPage,
   },
   {
-    path: 'eventlog',
-    element: EventLogPage,
-  },
-  {
     path: '/',
     element: LandingPage,
   },
   {
     path: '*',
-    element: InvalidObject,
+    element: LandingPage,
   },
 ];
 

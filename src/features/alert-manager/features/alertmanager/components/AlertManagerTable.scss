@@ -1,0 +1,14 @@
+// AlertManagerTable styles
+
+// Add vertical dividers between column headers and horizontal line at bottom
+[data-ouia-component-id="alert-manager-table"] {
+  // Vertical dividers between columns
+  .pf-v6-c-table__th:not(:last-child) {
+    border-inline-end: 1px solid var(--pf-v6-global--BorderColor--100);
+  }
+
+  // Horizontal line at bottom of header
+  .pf-v6-c-table thead {
+    border-block-end: 2px solid var(--pf-v6-global--BorderColor--100);
+  }
+}

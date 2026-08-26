@@ -23,6 +23,20 @@ module.exports = {
     exposes: {
       './RootApp': './src/AppEntry',
     },
-    shared: [],
+    exclude: ['react-router-dom'],
+    shared: [
+      {
+        'react-router-dom': {
+          singleton: true,
+          version: '*',
+          requiredVersion: '*',
+        },
+        'react-intl': {
+          singleton: true,
+          version: '*',
+          requiredVersion: '*',
+        },
+      },
+    ],
   },
 };
